@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PostHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --surface: #ffffff;
+      --accent: #e63946;
+      --accent2: #1d3557;
+      --text: #1a1a2e;
+      --muted: #888;
+      --border: #e0d8cc;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--accent2);
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+    }
+
+    header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 34px;
+      letter-spacing: 2px;
+    }
+
+    .header-badge {
+      background: var(--accent);
+      color: white;
+      padding: 5px 16px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 28px 22px;
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 72px);
+      overflow-y: auto;
+    }
+
+    .sidebar.editing {
+      border-left: 4px solid var(--accent);
+    }
+
+    .sidebar h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    /* FORM */
+    .field {
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: #fafaf8;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(29,53,87,0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.6;
+    }
+
+    .form-error {
+      background: #ffeaea;
+      border: 1px solid #ffb3b3;
+      color: #cc0000;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 20px;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      margin-bottom: 8px;
+    }
+    .btn-primary:hover { background: #c62a35; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(230,57,70,0.3); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .btn-cancel {
+      background: #f0ede8;
+      color: var(--muted);
+      display: none;
+    }
+    .btn-cancel:hover { background: #e5e0d8; color: var(--text); }
+
+    .btn-sm {
+      width: auto;
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+
+    .btn-edit {
+      background: #eef2ff;
+      color: var(--accent2);
+    }
+    .btn-edit:hover { background: #dce6ff; }
+
+    .btn-delete {
+      background: #fff0f0;
+      color: var(--accent);
+    }
+    .btn-delete:hover { background: #ffe0e0; }
+
+    /* CONTENT */
+    .content { padding: 32px 36px; }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .content-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 1px;
+      color: var(--accent2);
+    }
+
+    .badge {
+      background: var(--accent2);
+      color: white;
+      padding: 3px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* POSTS GRID */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    /* POST CARD */
+    .post-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: popIn 0.3s ease both;
+    }
+
+    .post-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .post-card-id {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .post-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.5px;
+      color: var(--accent2);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .post-card p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .post-card-actions {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    /* STATES */
+    .state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      gap: 14px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .state-icon { font-size: 52px; line-height: 1; }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--accent2);
+      color: white;
+      padding: 12px 22px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.err  { background: var(--accent); }
+
+    /* RESPONSIVE */
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+      .content { padding: 24px 16px; }
+      header { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📰 PostHub</h1>
+  <span class="header-badge" id="post-count">0 ta post</span>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR: FORM -->
+  <aside class="sidebar" id="sidebar">
+    <h2 id="form-title">➕ Yangi Post</h2>
+    <div class="form-error" id="form-error"></div>
+
+    <div class="field">
+      <label>Sarlavha</label>
+      <input type="text" id="inp-title" placeholder="Post sarlavhasi..." maxlength="50"/>
+    </div>
+
+    <div class="field">
+      <label>Matn</label>
+      <textarea id="inp-content" placeholder="Post matni..." maxlength="250"></textarea>
+    </div>
+
+    <button class="btn btn-primary" id="btn-submit" onclick="submitForm()">✚ Yaratish</button>
+    <button class="btn btn-cancel"  id="btn-cancel"  onclick="cancelEdit()">✕ Bekor qilish</button>
+  </aside>
+
+  <!-- CONTENT: POSTS -->
+  <main class="content">
+    <div class="content-header">
+      <h2>Barcha Postlar</h2>
+      <span class="badge" id="badge-count">0</span>
+    </div>
+    <div id="posts-container">
+      <div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>
+    </div>
+  </main>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = 'http://localhost:8000/api/posts';
+  let editingId = null;
+
+  // ── TOAST ──────────────────────────────────────────
+  function toast(msg, isErr = false) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast show' + (isErr ? ' err' : '');
+    setTimeout(() => el.className = 'toast', 3000);
+  }
+
+  // ── LOAD POSTS ─────────────────────────────────────
+  async function loadPosts() {
+    document.getElementById('posts-container').innerHTML =
+      `<div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>`;
+    try {
+      const res = await fetch(`${API}/`);
+      if (!res.ok) throw new Error();
+      render(await res.json());
+    } catch {
+      document.getElementById('posts-container').innerHTML =
+        `<div class="state">
+          <span class="state-icon">⚠️</span>
+          <p>Serverga ulanib bo'lmadi.<br>
+          Terminald <b>fastapi dev main.py</b> ishga tushiring.</p>
+        </div>`;
+    }
+  }
+
+  // ── RENDER ─────────────────────────────────────────
+  function render(posts) {
+    document.getElementById('post-count').textContent  = `${posts.length} ta post`;
+    document.getElementById('badge-count').textContent = posts.length;
+
+    if (!posts.length) {
+      document.getElementById('posts-container').innerHTML =
+        `<div class="state"><span class="state-icon">📭</span><p>Hali postlar yo'q.<br>Birinchi postni yarating!</p></div>`;
+      return;
+    }
+
+    document.getElementById('posts-container').innerHTML =
+      `<div class="posts-grid">${posts.map(card).join('')}</div>`;
+  }
+
+  function card(p) {
+    return `
+      <div class="post-card">
+        <div class="post-card-id"># ${p.id}</div>
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.content)}</p>
+        <div class="post-card-actions">
+          <button class="btn btn-edit btn-sm"
+            onclick="startEdit(${p.id}, \`${escJs(p.title)}\`, \`${escJs(p.content)}\`)">
+            ✏️ Tahrirlash
+          </button>
+          <button class="btn btn-delete btn-sm" onclick="del(${p.id})">
+            🗑 O'chirish
+          </button>
+        </div>
+      </div>`;
+  }
+
+  // ── CREATE / UPDATE ────────────────────────────────
+  async function submitForm() {
+    const title   = document.getElementById('inp-title').value.trim();
+    const content = document.getElementById('inp-content').value.trim();
+    const errEl   = document.getElementById('form-error');
+    const btn     = document.getElementById('btn-submit');
+
+    if (!title || !content) {
+      errEl.textContent    = "Sarlavha va matn to'ldirilishi shart!";
+      errEl.style.display  = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+    btn.disabled        = true;
+    btn.textContent     = '⏳ Saqlanmoqda...';
+
+    try {
+      const body = { title, content, image_path: null };
+
+      if (editingId) {
+        const res = await fetch(`${API}/${editingId}`, {
+          method:  'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ ...body, id: editingId })
+        });
+        if (!res.ok) throw new Error();
+        toast('✅ Post yangilandi!');
+        cancelEdit();
+      } else {
+        const res = await fetch(`${API}/`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(body)
+        });
+        if (!res.ok) throw new Error();
+        toast('✅ Post yaratildi!');
+        clearForm();
+      }
+      loadPosts();
+    } catch {
+      toast('❌ Xatolik yuz berdi!', true);
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = editingId ? '💾 Saqlash' : '✚ Yaratish';
+    }
+  }
+
+  // ── DELETE ─────────────────────────────────────────
+  async function del(id) {
+    if (!confirm("Bu postni o'chirishni xohlaysizmi?")) return;
+    try {
+      await fetch(`${API}/${id}`, { method: 'DELETE' });
+      toast("🗑 Post o'chirildi!");
+      loadPosts();
+    } catch {
+      toast("❌ O'chirishda xatolik!", true);
+    }
+  }
+
+  // ── EDIT MODE ──────────────────────────────────────
+  function startEdit(id, title, content) {
+    editingId = id;
+    document.getElementById('inp-title').value    = title;
+    document.getElementById('inp-content').value  = content;
+    document.getElementById('form-title').textContent  = '✏️ Postni Tahrirlash';
+    document.getElementById('btn-submit').textContent  = '💾 Saqlash';
+    document.getElementById('btn-cancel').style.display = 'flex';
+    document.getElementById('sidebar').classList.add('editing');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function cancelEdit() {
+    editingId = null;
+    clearForm();
+    document.getElementById('form-title').textContent   = '➕ Yangi Post';
+    document.getElementById('btn-submit').textContent   = '✚ Yaratish';
+    document.getElementById('btn-cancel').style.display = 'none';
+    document.getElementById('sidebar').classList.remove('editing');
+  }
+
+  function clearForm() {
+    document.getElementById('inp-title').value   = '';
+    document.getElementById('inp-content').value = '';
+    document.getElementById('form-error').style.display = 'none';
+  }
+
+  // ── HELPERS ────────────────────────────────────────
+  function esc(s) {
+    return String(s || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escJs(s) {
+    return String(s || '')
+      .replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+  }
+
+  // ── START ──────────────────────────────────────────
+  loadPosts();
+</script>
+</body>
+</html>
