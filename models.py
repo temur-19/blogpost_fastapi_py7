@@ -12,7 +12,7 @@ class Author(Base):
     last_name:Mapped[str] = mapped_column(String(length=100),nullable=False)
     post:Mapped['Posts'] = relationship(back_populates='auth',cascade='all, delete-orphan')
 
-
+  
 class Posts(Base):
     __tablename__ = 'posts'
     id:Mapped[int] = mapped_column(Integer, primary_key=True)

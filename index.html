@@ -9,7 +9,7 @@
   <style>
     :root {
       --bg: #f5f0e8;
-      --surface: #ffffff;
+      --surface: #fff;
       --accent: #e63946;
       --accent2: #1d3557;
       --text: #1a1a2e;
@@ -19,7 +19,7 @@
       --shadow: 0 4px 24px rgba(0,0,0,0.08);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Nunito', sans-serif;
@@ -28,71 +28,87 @@
       min-height: 100vh;
     }
 
-    /* HEADER */
+    /* ── HEADER ── */
     header {
       background: var(--accent2);
-      color: white;
-      padding: 20px 40px;
+      padding: 16px 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.18);
     }
 
     header h1 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 34px;
+      font-size: 30px;
       letter-spacing: 2px;
+      color: #fff;
     }
 
-    .header-badge {
+    .hbadge {
       background: var(--accent);
-      color: white;
-      padding: 5px 16px;
+      color: #fff;
+      padding: 4px 16px;
       border-radius: 99px;
       font-size: 13px;
       font-weight: 700;
     }
 
-    /* LAYOUT */
-    .layout {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      min-height: calc(100vh - 72px);
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      padding: 0 40px;
     }
 
-    /* SIDEBAR */
+    .tab {
+      padding: 13px 26px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color .2s, border-color .2s;
+    }
+
+    .tab:hover { color: var(--accent2); }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      min-height: calc(100vh - 112px);
+    }
+
+    /* ── SIDEBAR ── */
     .sidebar {
       background: var(--surface);
       border-right: 1px solid var(--border);
-      padding: 28px 22px;
+      padding: 24px 20px;
       position: sticky;
       top: 0;
-      height: calc(100vh - 72px);
+      height: calc(100vh - 112px);
       overflow-y: auto;
     }
 
-    .sidebar.editing {
-      border-left: 4px solid var(--accent);
-    }
+    .sidebar.editing { border-left: 4px solid var(--accent); }
 
     .sidebar h2 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
+      font-size: 19px;
       letter-spacing: 1px;
       color: var(--accent2);
-      margin-bottom: 20px;
-      padding-bottom: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
       border-bottom: 2px solid var(--accent);
     }
 
-    /* FORM */
-    .field {
-      margin-bottom: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    /* ── FORM ── */
+    .field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 5px; }
 
     label {
       font-size: 11px;
@@ -102,9 +118,9 @@
       color: var(--muted);
     }
 
-    input, textarea {
+    input, textarea, select {
       width: 100%;
-      padding: 10px 14px;
+      padding: 9px 13px;
       border: 1.5px solid var(--border);
       border-radius: var(--radius);
       font-family: 'Nunito', sans-serif;
@@ -112,219 +128,269 @@
       color: var(--text);
       background: #fafaf8;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color .2s, box-shadow .2s;
     }
 
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
       border-color: var(--accent2);
-      box-shadow: 0 0 0 3px rgba(29,53,87,0.1);
+      box-shadow: 0 0 0 3px rgba(29,53,87,.1);
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-      line-height: 1.6;
-    }
+    textarea { resize: vertical; min-height: 88px; line-height: 1.6; }
+    select { cursor: pointer; }
 
-    .form-error {
+    .ferr {
       background: #ffeaea;
       border: 1px solid #ffb3b3;
-      color: #cc0000;
-      padding: 10px 14px;
+      color: #c00;
+      padding: 9px 13px;
       border-radius: var(--radius);
       font-size: 13px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: none;
     }
 
-    /* BUTTONS */
+    /* ── BUTTONS ── */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 11px 20px;
+      padding: 10px 18px;
       border: none;
       border-radius: var(--radius);
       font-family: 'Nunito', sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.18s;
+      transition: all .18s;
       width: 100%;
     }
 
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-      margin-bottom: 8px;
-    }
-    .btn-primary:hover { background: #c62a35; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(230,57,70,0.3); }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-primary { background: var(--accent); color: #fff; margin-bottom: 7px; }
+    .btn-primary:hover { background: #c62a35; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(230,57,70,.3); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    .btn-cancel {
-      background: #f0ede8;
-      color: var(--muted);
-      display: none;
-    }
+    .btn-cancel { background: #f0ede8; color: var(--muted); display: none; }
     .btn-cancel:hover { background: #e5e0d8; color: var(--text); }
 
-    .btn-sm {
-      width: auto;
-      padding: 6px 14px;
-      font-size: 12px;
-    }
-
-    .btn-edit {
-      background: #eef2ff;
-      color: var(--accent2);
-    }
-    .btn-edit:hover { background: #dce6ff; }
-
-    .btn-delete {
-      background: #fff0f0;
-      color: var(--accent);
-    }
+    .btn-sm { width: auto; padding: 5px 12px; font-size: 12px; }
+    .btn-edit   { background: #eef2ff; color: var(--accent2); }
+    .btn-edit:hover   { background: #dce6ff; }
+    .btn-delete { background: #fff0f0; color: var(--accent); }
     .btn-delete:hover { background: #ffe0e0; }
 
-    /* CONTENT */
-    .content { padding: 32px 36px; }
+    /* ── CONTENT ── */
+    .content { padding: 26px 30px; }
 
     .content-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
+      gap: 10px;
+      margin-bottom: 22px;
     }
 
     .content-header h2 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 26px;
+      font-size: 22px;
       letter-spacing: 1px;
       color: var(--accent2);
     }
 
     .badge {
       background: var(--accent2);
-      color: white;
-      padding: 3px 12px;
+      color: #fff;
+      padding: 2px 11px;
       border-radius: 99px;
       font-size: 12px;
       font-weight: 700;
     }
 
-    /* POSTS GRID */
-    .posts-grid {
+    /* ── GRID ── */
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+      gap: 16px;
     }
 
-    /* POST CARD */
+    /* ── POST CARD ── */
     .post-card {
       background: var(--surface);
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      padding: 20px;
+      padding: 16px;
       box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-      animation: popIn 0.3s ease both;
+      transition: transform .2s, box-shadow .2s;
+      animation: popIn .3s ease both;
     }
 
-    .post-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
-    }
+    .post-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.1); }
 
     @keyframes popIn {
-      from { opacity: 0; transform: scale(0.95) translateY(10px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
+      from { opacity: 0; transform: scale(.95) translateY(10px); }
+      to   { opacity: 1; transform: scale(1)   translateY(0); }
     }
 
-    .post-card-id {
-      font-size: 11px;
+    .post-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .post-id {
+      font-size: 10px;
       font-weight: 700;
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 6px;
+    }
+
+    /* AUTHOR CHIP */
+    .author-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #f0f4ff;
+      border: 1px solid #d0dcff;
+      color: var(--accent2);
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .author-chip-avatar {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent2);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 800;
     }
 
     .post-card h3 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 20px;
-      letter-spacing: 0.5px;
+      font-size: 18px;
+      letter-spacing: .5px;
       color: var(--accent2);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       line-height: 1.2;
     }
 
     .post-card p {
       font-size: 13px;
       color: var(--muted);
-      line-height: 1.65;
-      margin-bottom: 16px;
+      line-height: 1.6;
+      margin-bottom: 12px;
     }
 
-    .post-card-actions {
+    .card-actions {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       border-top: 1px solid var(--border);
-      padding-top: 14px;
+      padding-top: 11px;
     }
 
-    /* STATES */
+    /* ── AUTHOR CARD ── */
+    .author-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      animation: popIn .3s ease both;
+      transition: transform .2s;
+    }
+
+    .author-card:hover { transform: translateY(-2px); }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--accent2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .author-info { flex: 1; }
+
+    .author-info h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 17px;
+      letter-spacing: .5px;
+      color: var(--accent2);
+    }
+
+    .author-info span { font-size: 12px; color: var(--muted); }
+
+    /* ── STATES ── */
     .state {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 80px 20px;
-      gap: 14px;
+      padding: 70px 20px;
+      gap: 12px;
       color: var(--muted);
       text-align: center;
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    .state-icon { font-size: 52px; line-height: 1; }
+    .state-icon { font-size: 46px; }
 
     .spinner {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border: 3px solid var(--border);
       border-top-color: var(--accent);
       border-radius: 50%;
-      animation: spin 0.75s linear infinite;
+      animation: spin .75s linear infinite;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* TOAST */
+    /* ── TOAST ── */
     .toast {
       position: fixed;
-      bottom: 28px;
-      right: 28px;
+      bottom: 22px;
+      right: 22px;
       background: var(--accent2);
-      color: white;
-      padding: 12px 22px;
+      color: #fff;
+      padding: 11px 20px;
       border-radius: var(--radius);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      box-shadow: 0 8px 24px rgba(0,0,0,.18);
       transform: translateY(80px);
       opacity: 0;
-      transition: all 0.3s ease;
+      transition: all .3s ease;
       z-index: 999;
     }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast.err  { background: var(--accent); }
 
-    /* RESPONSIVE */
-    @media (max-width: 820px) {
+    .page { display: none; }
+    .page.active { display: block; }
+
+    @media (max-width: 800px) {
       .layout { grid-template-columns: 1fr; }
       .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
-      .content { padding: 24px 16px; }
-      header { padding: 16px 20px; }
+      .content { padding: 18px 14px; }
+      header, .tabs { padding-left: 16px; padding-right: 16px; }
     }
   </style>
 </head>
@@ -332,145 +398,303 @@
 
 <header>
   <h1>📰 PostHub</h1>
-  <span class="header-badge" id="post-count">0 ta post</span>
+  <span class="hbadge" id="post-count">0 ta post</span>
 </header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('posts')">📝 Postlar</div>
+  <div class="tab"        onclick="switchTab('authors')">👤 Mualliflar</div>
+</div>
 
 <div class="layout">
 
-  <!-- SIDEBAR: FORM -->
+  <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
-    <h2 id="form-title">➕ Yangi Post</h2>
-    <div class="form-error" id="form-error"></div>
 
-    <div class="field">
-      <label>Sarlavha</label>
-      <input type="text" id="inp-title" placeholder="Post sarlavhasi..." maxlength="50"/>
+    <!-- POST FORM -->
+    <div id="post-form-wrap">
+      <h2 id="post-form-title">➕ Yangi Post</h2>
+      <div class="ferr" id="post-err"></div>
+
+      <div class="field">
+        <label>Sarlavha</label>
+        <input id="inp-title" type="text" placeholder="Post sarlavhasi..." maxlength="50"/>
+      </div>
+      <div class="field">
+        <label>Matn</label>
+        <textarea id="inp-content" placeholder="Post matni..." maxlength="250"></textarea>
+      </div>
+      <div class="field">
+        <label>Muallif</label>
+        <select id="inp-author">
+          <option value="">— Muallif tanlang —</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" id="post-btn" onclick="submitPost()">✚ Yaratish</button>
+      <button class="btn btn-cancel"  id="post-cancel" onclick="cancelEdit()">✕ Bekor qilish</button>
     </div>
 
-    <div class="field">
-      <label>Matn</label>
-      <textarea id="inp-content" placeholder="Post matni..." maxlength="250"></textarea>
+    <!-- AUTHOR FORM -->
+    <div id="author-form-wrap" style="display:none">
+      <h2>👤 Yangi Muallif</h2>
+      <div class="ferr" id="author-err"></div>
+
+      <div class="field">
+        <label>Ism</label>
+        <input id="inp-fn" type="text" placeholder="Ism..." maxlength="100"/>
+      </div>
+      <div class="field">
+        <label>Familiya</label>
+        <input id="inp-ln" type="text" placeholder="Familiya..." maxlength="100"/>
+      </div>
+
+      <button class="btn btn-primary" onclick="submitAuthor()">✚ Qo'shish</button>
     </div>
 
-    <button class="btn btn-primary" id="btn-submit" onclick="submitForm()">✚ Yaratish</button>
-    <button class="btn btn-cancel"  id="btn-cancel"  onclick="cancelEdit()">✕ Bekor qilish</button>
   </aside>
 
-  <!-- CONTENT: POSTS -->
+  <!-- ══ CONTENT ══ -->
   <main class="content">
-    <div class="content-header">
-      <h2>Barcha Postlar</h2>
-      <span class="badge" id="badge-count">0</span>
-    </div>
-    <div id="posts-container">
-      <div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>
-    </div>
-  </main>
 
+    <div class="page active" id="page-posts">
+      <div class="content-header">
+        <h2>Barcha Postlar</h2>
+        <span class="badge" id="badge-posts">0</span>
+      </div>
+      <div id="posts-container">
+        <div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-authors">
+      <div class="content-header">
+        <h2>Barcha Mualliflar</h2>
+        <span class="badge" id="badge-authors">0</span>
+      </div>
+      <div id="authors-container">
+        <div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>
+      </div>
+    </div>
+
+  </main>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
   const API = 'http://localhost:8000/api/posts';
+  let authors = [];
   let editingId = null;
 
-  // ── TOAST ──────────────────────────────────────────
-  function toast(msg, isErr = false) {
+  // ── TOAST ─────────────────────────────────────────
+  function toast(msg, err = false) {
     const el = document.getElementById('toast');
     el.textContent = msg;
-    el.className = 'toast show' + (isErr ? ' err' : '');
+    el.className = 'toast show' + (err ? ' err' : '');
     setTimeout(() => el.className = 'toast', 3000);
   }
 
-  // ── LOAD POSTS ─────────────────────────────────────
+  // ── TAB ───────────────────────────────────────────
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t, i) =>
+      t.classList.toggle('active', i === (tab === 'posts' ? 0 : 1))
+    );
+    document.getElementById('page-posts').classList.toggle('active', tab === 'posts');
+    document.getElementById('page-authors').classList.toggle('active', tab === 'authors');
+    document.getElementById('post-form-wrap').style.display   = tab === 'posts'   ? '' : 'none';
+    document.getElementById('author-form-wrap').style.display = tab === 'authors' ? '' : 'none';
+    if (tab === 'authors') loadAuthors();
+  }
+
+  // ── AUTHORS ───────────────────────────────────────
+  async function loadAuthors() {
+    try {
+      const res = await fetch(`${API}/users`);
+      if (!res.ok) throw new Error();
+      authors = await res.json();
+      renderAuthors();
+      fillSelect();
+    } catch {
+      document.getElementById('authors-container').innerHTML =
+        `<div class="state"><span class="state-icon">⚠️</span><p>Mualliflarni yuklashda xatolik.</p></div>`;
+    }
+  }
+
+  function fillSelect() {
+    const sel = document.getElementById('inp-author');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">— Muallif tanlang —</option>';
+    authors.forEach(a => {
+      const o = document.createElement('option');
+      o.value = a.id;
+      o.textContent = `${a.first_name} ${a.last_name}`;
+      sel.appendChild(o);
+    });
+    if (prev) sel.value = prev;
+  }
+
+  function renderAuthors() {
+    document.getElementById('badge-authors').textContent = authors.length;
+    if (!authors.length) {
+      document.getElementById('authors-container').innerHTML =
+        `<div class="state"><span class="state-icon">👤</span><p>Hali mualliflar yo'q.<br>Birinchi muallifni qo'shing!</p></div>`;
+      return;
+    }
+    document.getElementById('authors-container').innerHTML =
+      `<div class="grid">${authors.map(authorCard).join('')}</div>`;
+  }
+
+  function authorCard(a) {
+    const initials = (a.first_name[0] + a.last_name[0]).toUpperCase();
+    return `
+      <div class="author-card">
+        <div class="avatar">${esc(initials)}</div>
+        <div class="author-info">
+          <h3>${esc(a.first_name)} ${esc(a.last_name)}</h3>
+          <span>ID: #${a.id}</span>
+        </div>
+        <button class="btn btn-delete btn-sm" onclick="deleteAuthor(${a.id})">🗑</button>
+      </div>`;
+  }
+
+  async function submitAuthor() {
+    const first_name = document.getElementById('inp-fn').value.trim();
+    const last_name  = document.getElementById('inp-ln').value.trim();
+    const errEl = document.getElementById('author-err');
+
+    if (!first_name || !last_name) {
+      errEl.textContent = "Ism va familiya to'ldirilishi shart!";
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+
+    try {
+      const res = await fetch(`${API}/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ first_name, last_name })
+      });
+      if (!res.ok) throw new Error();
+      document.getElementById('inp-fn').value = '';
+      document.getElementById('inp-ln').value = '';
+      toast("✅ Muallif qo'shildi!");
+      loadAuthors();
+    } catch {
+      toast('❌ Xatolik yuz berdi!', true);
+    }
+  }
+
+  async function deleteAuthor(id) {
+    if (!confirm("Bu muallifni o'chirishni xohlaysizmi?")) return;
+    try {
+      await fetch(`${API}/users${id}`, { method: 'DELETE' });
+      toast("🗑 Muallif o'chirildi!");
+      loadAuthors();
+    } catch {
+      toast("❌ O'chirishda xatolik!", true);
+    }
+  }
+
+  // ── POSTS ─────────────────────────────────────────
   async function loadPosts() {
     document.getElementById('posts-container').innerHTML =
       `<div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>`;
     try {
       const res = await fetch(`${API}/`);
       if (!res.ok) throw new Error();
-      render(await res.json());
+      renderPosts(await res.json());
     } catch {
       document.getElementById('posts-container').innerHTML =
         `<div class="state">
           <span class="state-icon">⚠️</span>
-          <p>Serverga ulanib bo'lmadi.<br>
-          Terminald <b>fastapi dev main.py</b> ishga tushiring.</p>
+          <p>Serverga ulanib bo'lmadi.<br><b>fastapi dev main.py</b> ishga tushiring.</p>
         </div>`;
     }
   }
 
-  // ── RENDER ─────────────────────────────────────────
-  function render(posts) {
-    document.getElementById('post-count').textContent  = `${posts.length} ta post`;
-    document.getElementById('badge-count').textContent = posts.length;
+  function getAuthor(id) {
+    return authors.find(a => a.id === id);
+  }
 
+  function renderPosts(posts) {
+    document.getElementById('post-count').textContent  = `${posts.length} ta post`;
+    document.getElementById('badge-posts').textContent = posts.length;
     if (!posts.length) {
       document.getElementById('posts-container').innerHTML =
         `<div class="state"><span class="state-icon">📭</span><p>Hali postlar yo'q.<br>Birinchi postni yarating!</p></div>`;
       return;
     }
-
     document.getElementById('posts-container').innerHTML =
-      `<div class="posts-grid">${posts.map(card).join('')}</div>`;
+      `<div class="grid">${posts.map(postCard).join('')}</div>`;
   }
 
-  function card(p) {
+  function postCard(p) {
+    const a = getAuthor(p.author_id);
+    const name     = a ? `${a.first_name} ${a.last_name}` : `#${p.author_id}`;
+    const initials = a ? (a.first_name[0] + a.last_name[0]).toUpperCase() : '?';
+
     return `
       <div class="post-card">
-        <div class="post-card-id"># ${p.id}</div>
+        <div class="post-top">
+          <span class="post-id">#${p.id}</span>
+          <span class="author-chip">
+            <span class="author-chip-avatar">${esc(initials)}</span>
+            ${esc(name)}
+          </span>
+        </div>
         <h3>${esc(p.title)}</h3>
         <p>${esc(p.content)}</p>
-        <div class="post-card-actions">
+        <div class="card-actions">
           <button class="btn btn-edit btn-sm"
-            onclick="startEdit(${p.id}, \`${escJs(p.title)}\`, \`${escJs(p.content)}\`)">
+            onclick="startEdit(${p.id}, \`${escJs(p.title)}\`, \`${escJs(p.content)}\`, ${p.author_id})">
             ✏️ Tahrirlash
           </button>
-          <button class="btn btn-delete btn-sm" onclick="del(${p.id})">
+          <button class="btn btn-delete btn-sm" onclick="deletePost(${p.id})">
             🗑 O'chirish
           </button>
         </div>
       </div>`;
   }
 
-  // ── CREATE / UPDATE ────────────────────────────────
-  async function submitForm() {
-    const title   = document.getElementById('inp-title').value.trim();
-    const content = document.getElementById('inp-content').value.trim();
-    const errEl   = document.getElementById('form-error');
-    const btn     = document.getElementById('btn-submit');
+  async function submitPost() {
+    const title     = document.getElementById('inp-title').value.trim();
+    const content   = document.getElementById('inp-content').value.trim();
+    const author_id = document.getElementById('inp-author').value;
+    const errEl     = document.getElementById('post-err');
+    const btn       = document.getElementById('post-btn');
 
-    if (!title || !content) {
-      errEl.textContent    = "Sarlavha va matn to'ldirilishi shart!";
-      errEl.style.display  = 'block';
+    if (!title || !content || !author_id) {
+      errEl.textContent   = "Barcha maydonlarni to'ldiring!";
+      errEl.style.display = 'block';
       return;
     }
     errEl.style.display = 'none';
-    btn.disabled        = true;
-    btn.textContent     = '⏳ Saqlanmoqda...';
+    btn.disabled    = true;
+    btn.textContent = '⏳ Saqlanmoqda...';
 
     try {
-      const body = { title, content, image_path: null };
+      const body = { title, content, author_id: Number(author_id) };
 
       if (editingId) {
         const res = await fetch(`${API}/${editingId}`, {
-          method:  'PUT',
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ ...body, id: editingId })
+          body: JSON.stringify({ ...body, id: editingId })
         });
         if (!res.ok) throw new Error();
         toast('✅ Post yangilandi!');
         cancelEdit();
       } else {
         const res = await fetch(`${API}/`, {
-          method:  'POST',
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(body)
+          body: JSON.stringify(body)
         });
         if (!res.ok) throw new Error();
         toast('✅ Post yaratildi!');
-        clearForm();
+        clearPostForm();
       }
       loadPosts();
     } catch {
@@ -481,8 +705,7 @@
     }
   }
 
-  // ── DELETE ─────────────────────────────────────────
-  async function del(id) {
+  async function deletePost(id) {
     if (!confirm("Bu postni o'chirishni xohlaysizmi?")) return;
     try {
       await fetch(`${API}/${id}`, { method: 'DELETE' });
@@ -493,46 +716,44 @@
     }
   }
 
-  // ── EDIT MODE ──────────────────────────────────────
-  function startEdit(id, title, content) {
+  function startEdit(id, title, content, author_id) {
     editingId = id;
-    document.getElementById('inp-title').value    = title;
-    document.getElementById('inp-content').value  = content;
-    document.getElementById('form-title').textContent  = '✏️ Postni Tahrirlash';
-    document.getElementById('btn-submit').textContent  = '💾 Saqlash';
-    document.getElementById('btn-cancel').style.display = 'flex';
+    document.getElementById('inp-title').value   = title;
+    document.getElementById('inp-content').value = content;
+    document.getElementById('inp-author').value  = author_id;
+    document.getElementById('post-form-title').textContent = '✏️ Postni Tahrirlash';
+    document.getElementById('post-btn').textContent        = '💾 Saqlash';
+    document.getElementById('post-cancel').style.display  = 'flex';
     document.getElementById('sidebar').classList.add('editing');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function cancelEdit() {
     editingId = null;
-    clearForm();
-    document.getElementById('form-title').textContent   = '➕ Yangi Post';
-    document.getElementById('btn-submit').textContent   = '✚ Yaratish';
-    document.getElementById('btn-cancel').style.display = 'none';
+    clearPostForm();
+    document.getElementById('post-form-title').textContent = '➕ Yangi Post';
+    document.getElementById('post-btn').textContent        = '✚ Yaratish';
+    document.getElementById('post-cancel').style.display  = 'none';
     document.getElementById('sidebar').classList.remove('editing');
   }
 
-  function clearForm() {
+  function clearPostForm() {
     document.getElementById('inp-title').value   = '';
     document.getElementById('inp-content').value = '';
-    document.getElementById('form-error').style.display = 'none';
+    document.getElementById('inp-author').value  = '';
+    document.getElementById('post-err').style.display = 'none';
   }
 
-  // ── HELPERS ────────────────────────────────────────
+  // ── HELPERS ───────────────────────────────────────
   function esc(s) {
-    return String(s || '')
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
   function escJs(s) {
-    return String(s || '')
-      .replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+    return String(s||'').replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
   }
 
-  // ── START ──────────────────────────────────────────
-  loadPosts();
+  // ── INIT ──────────────────────────────────────────
+  loadAuthors().then(() => loadPosts());
 </script>
 </body>
 </html>

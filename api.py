@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
-from schemas import PostOut,PostCreate, PostUpdate,AuthorCreate, AuthorOut
+from schemas import PostOut,PostCreate, PostUpdate, AuthorCreate,AuthorOut
 from database import get_db
 from database import Base, engine
-from models import Posts, Author
+from models import Posts,Author
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from typing import List
@@ -21,14 +21,30 @@ def author_creat(author_in:AuthorCreate, db:Session = Depends(get_db)):
     db.refresh(author)
     return author
 
+@api_router.get('/users', response_model=List[AuthorOut])
+def get_authors(db: Session = Depends(get_db)):
+    stmt = select(Author)
+    authors = db.scalars(stmt).all()
+    return authors
+
+@api_router.delete('/users{author_id}')
+def delete_author(author_id:int, db:Session = Depends(get_db)):
+    stmt = select(Author).where(Author.id == author_id)
+    author = db.scalar(stmt)
+    if not author:
+        raise HTTPException(status_code=404, detail=f"{author_id} id li author mavjud emas")
+    
+    db.delete(author)
+    db.commit()
+    return "Muvaffaqiyatli o'chirildi"
 
 
 
 @api_router.post('/',response_model=PostOut)
 def post_creat(post_in:PostCreate, db = Depends(get_db)):
     stmt  = select(Author).where(Author.id == post_in.author_id)
-    autor = db.scalar(stmt)
-    if not autor:
+    author = db.scalar(stmt)
+    if not author:
         raise HTTPException(status_code=400,  detail=f"{post_in.author_id} li author mavud  emas")
     
     post  = Posts(**post_in.model_dump())
