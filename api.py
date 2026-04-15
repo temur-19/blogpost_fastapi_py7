@@ -1,25 +1,77 @@
-from fastapi import APIRouter, Depends, HTTPException
-from schemas import PostOut,PostCreate, PostUpdate, AuthorCreate,AuthorOut
-from database import get_db
-from database import Base, engine
-from models import Posts,Author
+import  security
+import jwt
+
+from fastapi import APIRouter, Depends, HTTPException,  status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from typing import List
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
+from schemas import PostOut,PostCreate, PostUpdate, AuthorCreate,AuthorOut,Token
+from database import Base, engine,get_db
+from models import Posts,Author
+
 
 Base.metadata.create_all(bind=engine)
 api_router = APIRouter(prefix='/api/posts')
 
 
+oauth2_schema = OAuth2PasswordBearer(tokenUrl='login')
+
+def get_current_user(token: str = Depends(oauth2_schema), db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Token yaroqsiz yoki muddati t   ugagan"
+    )
+    try:
+        payload = jwt.decode(token, security.SECRET_KEY, algorithms=[security.ALGORITHM])
+        author_id: str = payload.get("sub")
+        if author_id is None:
+            raise credentials_exception
+    except jwt.InvalidTokenError:
+        raise credentials_exception
+
+    author = db.scalar(select(Author).where(Author.id == int(author_id)))
+    if author is None:
+        raise credentials_exception
+
+    return author
 
 
 @api_router.post('/users',response_model=AuthorOut)
 def author_creat(author_in:AuthorCreate, db:Session = Depends(get_db)):
-    author  = Author(**author_in.model_dump())
+    author = db.scalar(select(Author).where(Author.first_name == author_in.first_name, Author.last_name == author_in.last_name))
+    if author:
+        raise HTTPException(status_code=404, detail='Bunday foydalanubchi mavjud')
+    
+    author = Author(
+    username=author_in.username,
+    first_name=author_in.first_name,
+    last_name=author_in.last_name,
+    hashed_password=security.get_password_hash(author_in.password))
+
     db.add(author)
     db.commit()
     db.refresh(author)
     return author
+
+@api_router.post('/au/login', response_model=Token)
+def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = db.scalar(select(Author).where(Author.username == form.username))
+    if not user:
+        raise HTTPException(status_code=400, detail="Bunday foydalanuvchi mavjud emas")
+
+    if not security.verify_password(form.password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Username yoki parol noto'g'ri")
+
+    access_token = security.create_access_token(data={"sub": str(user.id)})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@api_router.post('/users/me', response_model=AuthorOut)
+def get_current_user_profile(current_user: AuthorOut = Depends(get_current_user)):
+    return current_user
+
 
 @api_router.get('/users', response_model=List[AuthorOut])
 def get_authors(db: Session = Depends(get_db)):

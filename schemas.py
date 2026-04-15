@@ -10,10 +10,15 @@ class AuthorBase(BaseModel):
     last_name:str = Field(max_length=100)
 
 class AuthorCreate(AuthorBase):
-    pass 
+    username:str = Field(min_length = 3, max_length=100)
+    password:str = Field(min_length= 6, max_length=100)
 
 class AuthorOut(AuthorBase):
     id:int = Field(ge = 1)
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 
 
