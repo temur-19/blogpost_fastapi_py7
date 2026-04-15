@@ -1,5 +1,5 @@
-import  security
 import jwt
+import security
 
 from fastapi import APIRouter, Depends, HTTPException,  status
 from sqlalchemy import select
@@ -16,7 +16,7 @@ Base.metadata.create_all(bind=engine)
 api_router = APIRouter(prefix='/api/posts')
 
 
-oauth2_schema = OAuth2PasswordBearer(tokenUrl='login')
+oauth2_schema = OAuth2PasswordBearer(tokenUrl='api/posts/token')
 
 def get_current_user(token: str = Depends(oauth2_schema), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -38,24 +38,24 @@ def get_current_user(token: str = Depends(oauth2_schema), db: Session = Depends(
     return author
 
 
-@api_router.post('/users',response_model=AuthorOut)
+@api_router.post('/register',response_model=AuthorOut)
 def author_creat(author_in:AuthorCreate, db:Session = Depends(get_db)):
     author = db.scalar(select(Author).where(Author.first_name == author_in.first_name, Author.last_name == author_in.last_name))
     if author:
-        raise HTTPException(status_code=404, detail='Bunday foydalanubchi mavjud')
+        raise HTTPException(status_code=404, detail='Bunday foydalanuvchi mavjud')
     
     author = Author(
     username=author_in.username,
     first_name=author_in.first_name,
     last_name=author_in.last_name,
-    hashed_password=security.get_password_hash(author_in.password))
-
+    hashed_password = security.get_password_hash(author_in.password))
+    print(author)
     db.add(author)
     db.commit()
     db.refresh(author)
     return author
 
-@api_router.post('/au/login', response_model=Token)
+@api_router.post('/token', response_model=Token)
 def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.scalar(select(Author).where(Author.username == form.username))
     if not user:
