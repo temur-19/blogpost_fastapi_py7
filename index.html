@@ -1,538 +1,508 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PostHub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f5f0e8;
-      --surface: #fff;
-      --accent: #e63946;
-      --accent2: #1d3557;
-      --text: #1a1a2e;
-      --muted: #888;
-      --border: #e0d8cc;
-      --radius: 12px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.08);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* ── AUTH SCREEN ── */
-    #auth-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--accent2) 0%, #0d1f35 100%);
-    }
-
-    .auth-box {
-      background: var(--surface);
-      border-radius: 20px;
-      padding: 40px 36px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      animation: popIn .4s ease both;
-    }
-
-    .auth-box h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      letter-spacing: 2px;
-      color: var(--accent2);
-      margin-bottom: 4px;
-    }
-
-    .auth-box p {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
-
-    .auth-tabs {
-      display: flex;
-      gap: 0;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 22px;
-    }
-
-    .auth-tab {
-      flex: 1;
-      padding: 9px;
-      text-align: center;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 15px;
-      letter-spacing: 1px;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all .2s;
-      background: transparent;
-      border: none;
-    }
-
-    .auth-tab.active {
-      background: var(--accent2);
-      color: #fff;
-    }
-
-    /* ── HEADER ── */
-    header {
-      background: var(--accent2);
-      padding: 16px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.18);
-    }
-
-    header h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 30px;
-      letter-spacing: 2px;
-      color: #fff;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .hbadge {
-      background: var(--accent);
-      color: #fff;
-      padding: 4px 16px;
-      border-radius: 99px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    /* User chip in header */
-    .user-chip {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: #fff;
-      padding: 5px 14px 5px 6px;
-      border-radius: 99px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .user-chip-avatar {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 13px;
-    }
-
-    .btn-logout {
-      background: rgba(230,57,70,0.85);
-      color: #fff;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 99px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s;
-    }
-
-    .btn-logout:hover { background: var(--accent); }
-
-    /* ── TABS ── */
-    .tabs {
-      display: flex;
-      background: var(--surface);
-      border-bottom: 2px solid var(--border);
-      padding: 0 40px;
-    }
-
-    .tab {
-      padding: 13px 26px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 16px;
-      letter-spacing: 1px;
-      color: var(--muted);
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      transition: color .2s, border-color .2s;
-    }
-
-    .tab:hover { color: var(--accent2); }
-    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-    /* ── LAYOUT ── */
-    .layout {
-      display: grid;
-      grid-template-columns: 310px 1fr;
-      min-height: calc(100vh - 112px);
-    }
-
-    /* ── SIDEBAR ── */
-    .sidebar {
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      padding: 24px 20px;
-      position: sticky;
-      top: 0;
-      height: calc(100vh - 112px);
-      overflow-y: auto;
-    }
-
-    .sidebar.editing { border-left: 4px solid var(--accent); }
-
-    .sidebar h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 19px;
-      letter-spacing: 1px;
-      color: var(--accent2);
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid var(--accent);
-    }
-
-    /* ── FORM ── */
-    .field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 5px; }
-
-    label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--muted);
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 9px 13px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
-      color: var(--text);
-      background: #fafaf8;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: var(--accent2);
-      box-shadow: 0 0 0 3px rgba(29,53,87,.1);
-    }
-
-    textarea { resize: vertical; min-height: 88px; line-height: 1.6; }
-    select { cursor: pointer; }
-
-    .ferr {
-      background: #ffeaea;
-      border: 1px solid #ffb3b3;
-      color: #c00;
-      padding: 9px 13px;
-      border-radius: var(--radius);
-      font-size: 13px;
-      margin-bottom: 10px;
-      display: none;
-    }
-
-    /* ── BUTTONS ── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 10px 18px;
-      border: none;
-      border-radius: var(--radius);
-      font-family: 'Nunito', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .18s;
-      width: 100%;
-    }
-
-    .btn-primary { background: var(--accent); color: #fff; margin-bottom: 7px; }
-    .btn-primary:hover { background: #c62a35; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(230,57,70,.3); }
-    .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    .btn-secondary { background: var(--accent2); color: #fff; margin-bottom: 7px; }
-    .btn-secondary:hover { background: #162840; transform: translateY(-1px); }
-    .btn-secondary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-
-    .btn-cancel { background: #f0ede8; color: var(--muted); display: none; }
-    .btn-cancel:hover { background: #e5e0d8; color: var(--text); }
-
-    .btn-sm { width: auto; padding: 5px 12px; font-size: 12px; }
-    .btn-edit   { background: #eef2ff; color: var(--accent2); }
-    .btn-edit:hover   { background: #dce6ff; }
-    .btn-delete { background: #fff0f0; color: var(--accent); }
-    .btn-delete:hover { background: #ffe0e0; }
-
-    /* ── CONTENT ── */
-    .content { padding: 26px 30px; }
-
-    .content-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 22px;
-    }
-
-    .content-header h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: var(--accent2);
-    }
-
-    .badge {
-      background: var(--accent2);
-      color: #fff;
-      padding: 2px 11px;
-      border-radius: 99px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    /* ── GRID ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
-      gap: 16px;
-    }
-
-    /* ── POST CARD ── */
-    .post-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      transition: transform .2s, box-shadow .2s;
-      animation: popIn .3s ease both;
-    }
-
-    .post-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.1); }
-
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(.95) translateY(10px); }
-      to   { opacity: 1; transform: scale(1)   translateY(0); }
-    }
-
-    .post-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .post-id {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .author-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: #f0f4ff;
-      border: 1px solid #d0dcff;
-      color: var(--accent2);
-      padding: 3px 10px;
-      border-radius: 99px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .author-chip-avatar {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--accent2);
-      color: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 9px;
-      font-weight: 800;
-    }
-
-    .post-card h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 18px;
-      letter-spacing: .5px;
-      color: var(--accent2);
-      margin-bottom: 6px;
-      line-height: 1.2;
-    }
-
-    .post-card p {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 7px;
-      border-top: 1px solid var(--border);
-      padding-top: 11px;
-    }
-
-    /* ── AUTHOR CARD ── */
-    .author-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 16px 18px;
-      box-shadow: var(--shadow);
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      animation: popIn .3s ease both;
-      transition: transform .2s;
-    }
-
-    .author-card:hover { transform: translateY(-2px); }
-
-    .avatar {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: var(--accent2);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .author-info { flex: 1; }
-
-    .author-info h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 17px;
-      letter-spacing: .5px;
-      color: var(--accent2);
-    }
-
-    .author-info span { font-size: 12px; color: var(--muted); }
-
-    /* ── STATES ── */
-    .state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 70px 20px;
-      gap: 12px;
-      color: var(--muted);
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .state-icon { font-size: 46px; }
-
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin .75s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── TOAST ── */
-    .toast {
-      position: fixed;
-      bottom: 22px;
-      right: 22px;
-      background: var(--accent2);
-      color: #fff;
-      padding: 11px 20px;
-      border-radius: var(--radius);
-      font-size: 13px;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(0,0,0,.18);
-      transform: translateY(80px);
-      opacity: 0;
-      transition: all .3s ease;
-      z-index: 999;
-    }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.err  { background: var(--accent); }
-
-    /* ── TOKEN EXPIRY BANNER ── */
-    .token-banner {
-      display: none;
-      background: #fff3cd;
-      border-bottom: 1px solid #ffc107;
-      color: #856404;
-      padding: 8px 40px;
-      font-size: 13px;
-      font-weight: 600;
-      text-align: center;
-    }
-    .token-banner.show { display: block; }
-
-    .page { display: none; }
-    .page.active { display: block; }
-
-    /* ── APP SCREEN ── */
-    #app-screen { display: none; }
-
-    @media (max-width: 800px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
-      .content { padding: 18px 14px; }
-      header, .tabs { padding-left: 16px; padding-right: 16px; }
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PostHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0e0f14;
+  --surface:  #16181f;
+  --surface2: #1e2029;
+  --border:   #2a2d3a;
+  --accent:   #f5c542;
+  --accent2:  #e05c5c;
+  --blue:     #5c9eff;
+  --text:     #edeef2;
+  --muted:    #6b6f85;
+  --radius:   14px;
+  --shadow:   0 8px 32px rgba(0,0,0,.45);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+
+/* ══ NOISE OVERLAY ══ */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.6;
+}
+
+/* ══ AUTH SCREEN ══ */
+#auth-screen{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 30% 20%, rgba(245,197,66,.08) 0%, transparent 60%),
+             radial-gradient(ellipse at 80% 80%, rgba(92,158,255,.06) 0%, transparent 60%),
+             var(--bg);
+  z-index:100;
+}
+
+.auth-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:44px 40px;
+  width:100%;max-width:420px;
+  box-shadow:var(--shadow);
+  animation:slideUp .5s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(30px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+.auth-logo{
+  font-family:'Playfair Display',serif;
+  font-size:32px;font-weight:900;
+  color:var(--accent);
+  letter-spacing:-1px;
+  margin-bottom:6px;
+}
+
+.auth-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+
+.auth-tabs{
+  display:flex;gap:4px;
+  background:var(--surface2);
+  border-radius:10px;
+  padding:4px;
+  margin-bottom:24px;
+}
+
+.auth-tab{
+  flex:1;padding:8px;text-align:center;
+  border:none;background:transparent;
+  color:var(--muted);font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:600;
+  border-radius:8px;cursor:pointer;
+  transition:all .2s;
+}
+.auth-tab.active{background:var(--accent);color:#000}
+
+/* ══ FORM ELEMENTS ══ */
+.field{margin-bottom:14px;display:flex;flex-direction:column;gap:6px}
+
+label{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+
+input,textarea,select{
+  width:100%;padding:11px 14px;
+  background:var(--surface2);
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(245,197,66,.12);
+}
+select option{background:var(--surface2)}
+textarea{resize:vertical;min-height:90px;line-height:1.6}
+
+.ferr{
+  background:rgba(224,92,92,.12);
+  border:1px solid rgba(224,92,92,.4);
+  color:#f08080;padding:10px 14px;
+  border-radius:10px;font-size:13px;
+  margin-bottom:12px;display:none;
+}
+
+/* ══ BUTTONS ══ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:11px 20px;border:none;border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .18s;width:100%;
+}
+.btn-gold{background:var(--accent);color:#000;margin-bottom:8px}
+.btn-gold:hover{background:#f0b800;transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,197,66,.35)}
+.btn-gold:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text);margin-bottom:8px}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+
+.btn-ghost{background:transparent;color:var(--muted);display:none}
+.btn-ghost:hover{color:var(--text);background:var(--surface2)}
+
+.btn-sm{width:auto;padding:6px 13px;font-size:12px;border-radius:8px;margin-bottom:0}
+.btn-icon{width:auto;padding:7px 10px;border-radius:8px;margin-bottom:0}
+
+/* ══ APP SHELL ══ */
+#app-screen{display:none}
+
+/* ══ TOPBAR ══ */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(14,15,20,.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:58px;
+}
+
+.topbar-logo{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:900;color:var(--accent);
+  letter-spacing:-0.5px;
+}
+
+.topbar-nav{display:flex;gap:4px}
+
+.nav-btn{
+  background:transparent;border:none;
+  color:var(--muted);
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;
+  padding:7px 16px;border-radius:8px;
+  cursor:pointer;transition:all .2s;
+}
+.nav-btn:hover{color:var(--text);background:var(--surface2)}
+.nav-btn.active{color:var(--accent);background:rgba(245,197,66,.1)}
+
+.topbar-right{display:flex;align-items:center;gap:10px}
+
+.user-pill{
+  display:flex;align-items:center;gap:8px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  padding:5px 14px 5px 6px;
+  border-radius:99px;font-size:13px;font-weight:500;
+}
+.user-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--accent);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:13px;font-weight:700;flex-shrink:0;
+}
+
+.btn-logout-pill{
+  background:rgba(224,92,92,.15);
+  border:1px solid rgba(224,92,92,.3);
+  color:#e05c5c;
+  padding:6px 14px;border-radius:99px;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.btn-logout-pill:hover{background:rgba(224,92,92,.25)}
+
+/* ══ LAYOUT ══ */
+.layout{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  min-height:calc(100vh - 58px);
+}
+
+/* ══ SIDEBAR ══ */
+.sidebar{
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  padding:22px 18px;
+  position:sticky;top:58px;
+  height:calc(100vh - 58px);
+  overflow-y:auto;
+}
+.sidebar.editing{border-left:3px solid var(--accent)}
+
+.sidebar-title{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-weight:700;
+  color:var(--text);
+  margin-bottom:18px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+
+/* ══ MAIN ══ */
+.main{padding:26px 28px}
+
+.page{display:none}
+.page.active{display:block}
+
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;
+  color:var(--text);
+}
+.count-pill{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:3px 12px;border-radius:99px;
+  font-size:12px;font-weight:600;
+}
+
+/* ══ GRID ══ */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:18px;
+}
+
+/* ══ POST CARD ══ */
+.post-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+  animation:popIn .35s cubic-bezier(.22,1,.36,1) both;
+  display:flex;flex-direction:column;gap:10px;
+}
+.post-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(245,197,66,.25);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+}
+
+@keyframes popIn{
+  from{opacity:0;transform:translateY(14px) scale(.97)}
+  to  {opacity:1;transform:translateY(0)    scale(1)}
+}
+
+.post-meta{display:flex;align-items:center;justify-content:space-between}
+
+.post-id-chip{
+  font-size:10px;font-weight:700;letter-spacing:1px;
+  color:var(--muted);text-transform:uppercase;
+}
+
+.author-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(92,158,255,.1);
+  border:1px solid rgba(92,158,255,.2);
+  color:var(--blue);
+  padding:3px 10px;border-radius:99px;
+  font-size:11px;font-weight:600;
+}
+.author-pill-dot{
+  width:16px;height:16px;border-radius:50%;
+  background:var(--blue);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-size:8px;font-weight:800;color:#fff;
+}
+
+.post-title{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-weight:700;
+  color:var(--text);line-height:1.3;
+}
+
+.post-body{
+  font-size:13px;color:var(--muted);
+  line-height:1.65;
+  flex:1;
+}
+
+/* like/comment bar */
+.post-actions{
+  display:flex;align-items:center;gap:8px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+  flex-wrap:wrap;
+}
+
+.like-btn{
+  display:flex;align-items:center;gap:5px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:5px 12px;border-radius:8px;
+  font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.like-btn:hover,.like-btn.liked{
+  background:rgba(224,92,92,.12);
+  border-color:rgba(224,92,92,.35);
+  color:var(--accent2);
+}
+.like-btn.liked .heart{color:var(--accent2)}
+
+.comment-toggle{
+  display:flex;align-items:center;gap:5px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:5px 12px;border-radius:8px;
+  font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.comment-toggle:hover{border-color:rgba(92,158,255,.35);color:var(--blue)}
+
+.spacer{flex:1}
+
+.edit-actions{display:flex;gap:6px}
+
+.btn-edit-sm{
+  background:rgba(245,197,66,.1);
+  border:1px solid rgba(245,197,66,.25);
+  color:var(--accent);
+  padding:5px 11px;border-radius:8px;
+  font-size:11px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.btn-edit-sm:hover{background:rgba(245,197,66,.2)}
+
+.btn-del-sm{
+  background:rgba(224,92,92,.1);
+  border:1px solid rgba(224,92,92,.25);
+  color:var(--accent2);
+  padding:5px 11px;border-radius:8px;
+  font-size:11px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.btn-del-sm:hover{background:rgba(224,92,92,.2)}
+
+/* ── comments section ── */
+.comments-wrap{
+  display:none;
+  border-top:1px solid var(--border);
+  padding-top:12px;
+  flex-direction:column;gap:8px;
+}
+.comments-wrap.open{display:flex}
+
+.comment-item{
+  background:var(--surface2);
+  border-radius:8px;
+  padding:8px 12px;
+}
+.comment-author{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px}
+.comment-text{font-size:12px;color:var(--muted);line-height:1.5}
+
+.comment-input-row{
+  display:flex;gap:7px;
+  margin-top:4px;
+}
+.comment-input-row input{
+  flex:1;padding:8px 12px;font-size:13px;border-radius:8px;
+}
+.btn-send{
+  background:var(--accent);color:#000;
+  border:none;padding:8px 14px;border-radius:8px;
+  font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.btn-send:hover{background:#f0b800}
+
+/* ══ AUTHOR CARD ══ */
+.author-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px 20px;
+  display:flex;align-items:center;gap:14px;
+  transition:transform .2s,border-color .2s;
+  animation:popIn .35s cubic-bezier(.22,1,.36,1) both;
+}
+.author-card:hover{transform:translateY(-3px);border-color:rgba(92,158,255,.25)}
+
+.ava{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#f0a500);
+  color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:900;flex-shrink:0;
+}
+
+.ava-info{flex:1}
+.ava-name{
+  font-family:'Playfair Display',serif;
+  font-size:16px;font-weight:700;color:var(--text);
+}
+.ava-username{font-size:12px;color:var(--muted)}
+
+/* ══ STATE ══ */
+.state{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:80px 20px;gap:14px;
+  color:var(--muted);text-align:center;
+}
+.state-icon{font-size:48px;opacity:.6}
+.state p{font-size:14px;line-height:1.6}
+
+.spinner{
+  width:38px;height:38px;
+  border:3px solid var(--border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ══ TOAST ══ */
+.toast{
+  position:fixed;bottom:22px;right:22px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:12px 20px;border-radius:var(--radius);
+  font-size:13px;font-weight:500;
+  box-shadow:var(--shadow);
+  transform:translateY(80px);opacity:0;
+  transition:all .3s ease;z-index:999;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok  {border-color:rgba(245,197,66,.4);color:var(--accent)}
+.toast.err {border-color:rgba(224,92,92,.4);color:var(--accent2)}
+
+/* ══ SESSION BANNER ══ */
+.session-banner{
+  display:none;
+  background:rgba(245,197,66,.08);
+  border-bottom:1px solid rgba(245,197,66,.2);
+  color:var(--accent);
+  text-align:center;
+  padding:8px 20px;
+  font-size:13px;font-weight:600;
+}
+.session-banner.show{display:block}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:820px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}
+  .main{padding:16px 14px}
+  .topbar{padding:0 16px}
+}
+</style>
 </head>
 <body>
 
 <!-- ══ AUTH SCREEN ══ -->
 <div id="auth-screen">
-  <div class="auth-box">
-    <h2>📰 PostHub</h2>
-    <p>Tizimga kirish yoki ro'yxatdan o'tish</p>
+  <div class="auth-card">
+    <div class="auth-logo">📰 PostHub</div>
+    <div class="auth-sub">Kirish yoki ro'yxatdan o'ting</div>
 
     <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="showAuthTab('login')">Kirish</button>
-      <button class="auth-tab" id="tab-register" onclick="showAuthTab('register')">Ro'yxat</button>
+      <button class="auth-tab active" id="at-login"    onclick="showAuthTab('login')">Kirish</button>
+      <button class="auth-tab"        id="at-register" onclick="showAuthTab('register')">Ro'yxat</button>
     </div>
 
     <!-- LOGIN -->
@@ -540,122 +510,137 @@
       <div class="ferr" id="login-err"></div>
       <div class="field">
         <label>Username</label>
-        <input id="login-username" type="text" placeholder="username..." autocomplete="username"/>
+        <input id="l-user" type="text" placeholder="username..." autocomplete="username"/>
       </div>
       <div class="field">
         <label>Parol</label>
-        <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"/>
+        <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password"/>
       </div>
-      <button class="btn btn-primary" id="login-btn" onclick="doLogin()">🔑 Kirish</button>
+      <button class="btn btn-gold" id="login-btn" onclick="doLogin()">🔑 Kirish</button>
     </div>
 
     <!-- REGISTER -->
     <div id="register-form" style="display:none">
-      <div class="ferr" id="register-err"></div>
+      <div class="ferr" id="reg-err"></div>
+      <div class="field">
+        <label>Ism</label>
+        <input id="r-fn" type="text" placeholder="Ism..."/>
+      </div>
+      <div class="field">
+        <label>Familiya</label>
+        <input id="r-ln" type="text" placeholder="Familiya..."/>
+      </div>
       <div class="field">
         <label>Username</label>
-        <input id="reg-username" type="text" placeholder="username..." autocomplete="username"/>
+        <input id="r-user" type="text" placeholder="username..." autocomplete="username"/>
       </div>
       <div class="field">
         <label>Parol</label>
-        <input id="reg-password" type="password" placeholder="••••••••" autocomplete="new-password"/>
+        <input id="r-pass" type="password" placeholder="••••••••" autocomplete="new-password"/>
       </div>
       <div class="field">
         <label>Parolni tasdiqlang</label>
-        <input id="reg-password2" type="password" placeholder="••••••••" autocomplete="new-password"/>
+        <input id="r-pass2" type="password" placeholder="••••••••"/>
       </div>
-      <button class="btn btn-secondary" id="register-btn" onclick="doRegister()">✚ Ro'yxatdan o'tish</button>
+      <button class="btn btn-outline" id="reg-btn" onclick="doRegister()">✚ Ro'yxatdan o'tish</button>
     </div>
   </div>
 </div>
 
-<!-- ══ APP SCREEN ══ -->
+<!-- ══ APP ══ -->
 <div id="app-screen">
+  <div class="session-banner" id="sess-banner">⚠️ Sessiyangiz 2 daqiqada tugaydi. Qayta kiring!</div>
 
-  <div class="token-banner" id="token-banner">
-    ⚠️ Sessiyangiz tez orada tugaydi. Iltimos, qayta kiring.
-  </div>
-
-  <header>
-    <h1>📰 PostHub</h1>
-    <div class="header-right">
-      <span class="hbadge" id="post-count">0 ta post</span>
-      <div class="user-chip">
-        <div class="user-chip-avatar" id="header-avatar">U</div>
-        <span id="header-username">User</span>
-      </div>
-      <button class="btn-logout" onclick="doLogout()">🚪 Chiqish</button>
+  <nav class="topbar">
+    <span class="topbar-logo">📰 PostHub</span>
+    <div class="topbar-nav">
+      <button class="nav-btn active" id="nav-posts"   onclick="switchTab('posts')">📝 Postlar</button>
+      <button class="nav-btn"        id="nav-authors" onclick="switchTab('authors')">👤 Mualliflar</button>
     </div>
-  </header>
-
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('posts')">📝 Postlar</div>
-    <div class="tab"        onclick="switchTab('authors')">👤 Mualliflar</div>
-  </div>
+    <div class="topbar-right">
+      <div class="user-pill">
+        <div class="user-avatar" id="h-ava">U</div>
+        <span id="h-name">User</span>
+      </div>
+      <button class="btn-logout-pill" onclick="doLogout()">🚪 Chiqish</button>
+    </div>
+  </nav>
 
   <div class="layout">
 
-    <!-- ══ SIDEBAR ══ -->
+    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
 
-      <div id="post-form-wrap">
-        <h2 id="post-form-title">➕ Yangi Post</h2>
+      <!-- POST FORM -->
+      <div id="post-form-section">
+        <div class="sidebar-title" id="pf-title">➕ Yangi Post</div>
         <div class="ferr" id="post-err"></div>
-
         <div class="field">
           <label>Sarlavha</label>
-          <input id="inp-title" type="text" placeholder="Post sarlavhasi..." maxlength="50"/>
+          <input id="p-title" type="text" placeholder="Post sarlavhasi..." maxlength="100"/>
         </div>
         <div class="field">
           <label>Matn</label>
-          <textarea id="inp-content" placeholder="Post matni..." maxlength="250"></textarea>
+          <textarea id="p-content" placeholder="Post matni..." maxlength="500"></textarea>
+        </div>
+        <div class="field">
+          <label>Rasm URL (ixtiyoriy)</label>
+          <input id="p-image" type="text" placeholder="https://..."/>
         </div>
         <div class="field">
           <label>Muallif</label>
-          <select id="inp-author">
+          <select id="p-author">
             <option value="">— Muallif tanlang —</option>
           </select>
         </div>
-
-        <button class="btn btn-primary" id="post-btn" onclick="submitPost()">✚ Yaratish</button>
-        <button class="btn btn-cancel"  id="post-cancel" onclick="cancelEdit()">✕ Bekor qilish</button>
+        <button class="btn btn-gold" id="post-btn" onclick="submitPost()">✚ Yaratish</button>
+        <button class="btn btn-ghost" id="post-cancel" onclick="cancelEdit()">✕ Bekor qilish</button>
       </div>
 
-      <div id="author-form-wrap" style="display:none">
-        <h2>👤 Yangi Muallif</h2>
+      <!-- AUTHOR FORM -->
+      <div id="author-form-section" style="display:none">
+        <div class="sidebar-title">👤 Yangi Muallif</div>
         <div class="ferr" id="author-err"></div>
-
         <div class="field">
           <label>Ism</label>
-          <input id="inp-fn" type="text" placeholder="Ism..." maxlength="100"/>
+          <input id="a-fn" type="text" placeholder="Ism..."/>
         </div>
         <div class="field">
           <label>Familiya</label>
-          <input id="inp-ln" type="text" placeholder="Familiya..." maxlength="100"/>
+          <input id="a-ln" type="text" placeholder="Familiya..."/>
         </div>
-
-        <button class="btn btn-primary" onclick="submitAuthor()">✚ Qo'shish</button>
+        <div class="field">
+          <label>Username</label>
+          <input id="a-user" type="text" placeholder="username..."/>
+        </div>
+        <div class="field">
+          <label>Parol</label>
+          <input id="a-pass" type="password" placeholder="••••••••"/>
+        </div>
+        <button class="btn btn-gold" onclick="submitAuthor()">✚ Qo'shish</button>
       </div>
 
     </aside>
 
-    <!-- ══ CONTENT ══ -->
-    <main class="content">
+    <!-- MAIN -->
+    <main class="main">
 
+      <!-- POSTS PAGE -->
       <div class="page active" id="page-posts">
-        <div class="content-header">
-          <h2>Barcha Postlar</h2>
-          <span class="badge" id="badge-posts">0</span>
+        <div class="section-header">
+          <span class="section-title">Barcha Postlar</span>
+          <span class="count-pill" id="badge-posts">0 ta</span>
         </div>
         <div id="posts-container">
           <div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>
         </div>
       </div>
 
+      <!-- AUTHORS PAGE -->
       <div class="page" id="page-authors">
-        <div class="content-header">
-          <h2>Barcha Mualliflar</h2>
-          <span class="badge" id="badge-authors">0</span>
+        <div class="section-header">
+          <span class="section-title">Barcha Mualliflar</span>
+          <span class="count-pill" id="badge-authors">0 ta</span>
         </div>
         <div id="authors-container">
           <div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>
@@ -664,525 +649,528 @@
 
     </main>
   </div>
-
-</div><!-- /app-screen -->
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  const API = 'http://localhost:8000/api/posts';
-  const AUTH_API = 'http://localhost:8000';   // /token, /register endpointlari
+// ════════════════════════════════════════
+//  CONFIG
+// ════════════════════════════════════════
+const BASE = 'http://localhost:8000/api/posts';
 
-  let authors   = [];
-  let editingId = null;
-  let tokenExpiryTimer = null;
+let authors   = [];
+let editingId = null;
+let expiryTimer = null;
+let currentUser = null;   // logged-in author object
 
-  // ════════════════════════════════════════════════
-  //  TOKEN MANAGEMENT
-  // ════════════════════════════════════════════════
+// ════════════════════════════════════════
+//  TOKEN HELPERS
+// ════════════════════════════════════════
+function saveToken(token, username) {
+  localStorage.setItem('ph_token', token);
+  localStorage.setItem('ph_user',  username);
+  scheduleExpiry(token);
+}
+function getToken()    { return localStorage.getItem('ph_token'); }
+function getUsername() { return localStorage.getItem('ph_user') || 'User'; }
+function clearToken()  {
+  localStorage.removeItem('ph_token');
+  localStorage.removeItem('ph_user');
+  if (expiryTimer) clearTimeout(expiryTimer);
+}
 
-  function saveToken(token, username) {
-    localStorage.setItem('access_token', token);
-    localStorage.setItem('username', username);
+function scheduleExpiry(token) {
+  try {
+    const {exp} = JSON.parse(atob(token.split('.')[1]));
+    if (!exp) return;
+    const ms = exp * 1000 - Date.now();
+    const warnMs = ms - 2 * 60 * 1000;
+    if (warnMs > 0) setTimeout(() => document.getElementById('sess-banner').classList.add('show'), warnMs);
+    expiryTimer = setTimeout(() => { toast('⌛ Sessiya tugadi', 'err'); doLogout(); }, ms);
+  } catch {}
+}
 
-    // JWT payload'dan exp ni o'qish
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      if (payload.exp) {
-        const msLeft = payload.exp * 1000 - Date.now();
-        scheduleTokenExpiry(msLeft);
-      }
-    } catch (e) { /* ignore */ }
+function authH(extra = {}) {
+  return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}`, ...extra };
+}
+
+async function checkAuth(res) {
+  if (res.status === 401) {
+    toast('🔒 Sessiya tugadi, qayta kiring', 'err');
+    doLogout();
+    return true;
   }
+  return false;
+}
 
-  function getToken() {
-    return localStorage.getItem('access_token');
-  }
+// ════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show ${type}`;
+  setTimeout(() => el.className = 'toast', 3000);
+}
 
-  function clearToken() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('username');
-    if (tokenExpiryTimer) clearTimeout(tokenExpiryTimer);
-  }
+// ════════════════════════════════════════
+//  AUTH UI
+// ════════════════════════════════════════
+function showAuthTab(tab) {
+  document.getElementById('login-form').style.display    = tab === 'login'    ? '' : 'none';
+  document.getElementById('register-form').style.display = tab === 'register' ? '' : 'none';
+  document.getElementById('at-login').classList.toggle('active',    tab === 'login');
+  document.getElementById('at-register').classList.toggle('active', tab === 'register');
+}
 
-  // Token muddati tugashidan 2 daqiqa oldin ogohlantirish,
-  // tugaganda avtomatik logout
-  function scheduleTokenExpiry(msLeft) {
-    if (tokenExpiryTimer) clearTimeout(tokenExpiryTimer);
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const lf = document.getElementById('login-form');
+  const rf = document.getElementById('register-form');
+  if (lf.style.display !== 'none') doLogin();
+  else if (rf.style.display !== 'none') doRegister();
+});
 
-    const warnAt = msLeft - 2 * 60 * 1000; // 2 daqiqa oldin
-    if (warnAt > 0) {
-      tokenExpiryTimer = setTimeout(() => {
-        document.getElementById('token-banner').classList.add('show');
-      }, warnAt);
-    }
+async function doLogin() {
+  const username = document.getElementById('l-user').value.trim();
+  const password = document.getElementById('l-pass').value;
+  const errEl    = document.getElementById('login-err');
+  const btn      = document.getElementById('login-btn');
 
-    setTimeout(() => {
-      toast('⌛ Sessiya muddati tugadi. Qayta kiring.', true);
-      doLogout();
-    }, msLeft);
-  }
+  if (!username || !password) { errEl.textContent = "Username va parolni kiriting!"; errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = '⏳ Kirilmoqda...';
 
-  // Barcha API so'rovlar uchun Authorization headeri
-  function authHeaders(extra = {}) {
-    return {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}`,
-      ...extra
-    };
-  }
-
-  // 401 javobni tekshirish — token eskirgan
-  function handle401(res) {
-    if (res.status === 401) {
-      toast('🔒 Sessiya tugadi. Qayta kiring.', true);
-      doLogout();
-      return true;
-    }
-    return false;
-  }
-
-  // ════════════════════════════════════════════════
-  //  AUTH SCREEN
-  // ════════════════════════════════════════════════
-
-  function showAuthTab(tab) {
-    document.getElementById('login-form').style.display    = tab === 'login'    ? '' : 'none';
-    document.getElementById('register-form').style.display = tab === 'register' ? '' : 'none';
-    document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
-    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
-  }
-
-  // Enter tuşu support
-  document.addEventListener('keydown', e => {
-    if (e.key !== 'Enter') return;
-    if (document.getElementById('login-form').style.display !== 'none')
-      doLogin();
-    else if (document.getElementById('register-form').style.display !== 'none')
-      doRegister();
-  });
-
-  async function doLogin() {
-    const username = document.getElementById('login-username').value.trim();
-    const password = document.getElementById('login-password').value;
-    const errEl    = document.getElementById('login-err');
-    const btn      = document.getElementById('login-btn');
-
-    if (!username || !password) {
-      errEl.textContent = "Username va parolni kiriting!";
-      errEl.style.display = 'block';
-      return;
-    }
-    errEl.style.display = 'none';
-    btn.disabled = true;
-    btn.textContent = '⏳ Kirilmoqda...';
-
-    try {
-      // OAuth2 password flow — form-urlencoded
-      const res = await fetch(`${AUTH_API}/token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ username, password })
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        errEl.textContent = data.detail || "Username yoki parol noto'g'ri!";
-        errEl.style.display = 'block';
-        return;
-      }
-
-      const data = await res.json();
-      saveToken(data.access_token, username);
-      enterApp(username);
-
-    } catch {
-      errEl.textContent = "Serverga ulanib bo'lmadi!";
-      errEl.style.display = 'block';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '🔑 Kirish';
-    }
-  }
-
-  async function doRegister() {
-    const username  = document.getElementById('reg-username').value.trim();
-    const password  = document.getElementById('reg-password').value;
-    const password2 = document.getElementById('reg-password2').value;
-    const errEl     = document.getElementById('register-err');
-    const btn       = document.getElementById('register-btn');
-
-    if (!username || !password) {
-      errEl.textContent = "Barcha maydonlarni to'ldiring!";
-      errEl.style.display = 'block';
-      return;
-    }
-    if (password !== password2) {
-      errEl.textContent = "Parollar mos kelmadi!";
-      errEl.style.display = 'block';
-      return;
-    }
-    errEl.style.display = 'none';
-    btn.disabled = true;
-    btn.textContent = '⏳ Ro\'yxatdan o\'tilmoqda...';
-
-    try {
-      const res = await fetch(`${AUTH_API}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        errEl.textContent = data.detail || "Ro'yxatdan o'tishda xatolik!";
-        errEl.style.display = 'block';
-        return;
-      }
-
-      toast('✅ Ro\'yxatdan o\'tdingiz! Kiring.');
-      showAuthTab('login');
-      document.getElementById('login-username').value = username;
-
-    } catch {
-      errEl.textContent = "Serverga ulanib bo'lmadi!";
-      errEl.style.display = 'block';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '✚ Ro\'yxatdan o\'tish';
-    }
-  }
-
-  function enterApp(username) {
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('app-screen').style.display  = 'block';
-    document.getElementById('header-username').textContent = username;
-    document.getElementById('header-avatar').textContent   = username[0].toUpperCase();
-    loadAuthors().then(() => loadPosts());
-  }
-
-  function doLogout() {
-    clearToken();
-    document.getElementById('token-banner').classList.remove('show');
-    document.getElementById('app-screen').style.display  = 'none';
-    document.getElementById('auth-screen').style.display = 'flex';
-    // formlarni tozalash
-    document.getElementById('login-password').value = '';
-    document.getElementById('login-err').style.display = 'none';
-  }
-
-  // ════════════════════════════════════════════════
-  //  TOAST
-  // ════════════════════════════════════════════════
-  function toast(msg, err = false) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.className = 'toast show' + (err ? ' err' : '');
-    setTimeout(() => el.className = 'toast', 3000);
-  }
-
-  // ════════════════════════════════════════════════
-  //  TABS
-  // ════════════════════════════════════════════════
-  function switchTab(tab) {
-    document.querySelectorAll('.tab').forEach((t, i) =>
-      t.classList.toggle('active', i === (tab === 'posts' ? 0 : 1))
-    );
-    document.getElementById('page-posts').classList.toggle('active', tab === 'posts');
-    document.getElementById('page-authors').classList.toggle('active', tab === 'authors');
-    document.getElementById('post-form-wrap').style.display   = tab === 'posts'   ? '' : 'none';
-    document.getElementById('author-form-wrap').style.display = tab === 'authors' ? '' : 'none';
-    if (tab === 'authors') loadAuthors();
-  }
-
-  // ════════════════════════════════════════════════
-  //  AUTHORS
-  // ════════════════════════════════════════════════
-  async function loadAuthors() {
-    try {
-      const res = await fetch(`${API}/users`, { headers: authHeaders() });
-      if (handle401(res)) return;
-      if (!res.ok) throw new Error();
-      authors = await res.json();
-      renderAuthors();
-      fillSelect();
-    } catch {
-      document.getElementById('authors-container').innerHTML =
-        `<div class="state"><span class="state-icon">⚠️</span><p>Mualliflarni yuklashda xatolik.</p></div>`;
-    }
-  }
-
-  function fillSelect() {
-    const sel  = document.getElementById('inp-author');
-    const prev = sel.value;
-    sel.innerHTML = '<option value="">— Muallif tanlang —</option>';
-    authors.forEach(a => {
-      const o = document.createElement('option');
-      o.value = a.id;
-      o.textContent = `${a.first_name} ${a.last_name}`;
-      sel.appendChild(o);
+  try {
+    const res = await fetch(`${BASE}/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ username, password })
     });
-    if (prev) sel.value = prev;
-  }
-
-  function renderAuthors() {
-    document.getElementById('badge-authors').textContent = authors.length;
-    if (!authors.length) {
-      document.getElementById('authors-container').innerHTML =
-        `<div class="state"><span class="state-icon">👤</span><p>Hali mualliflar yo'q.<br>Birinchi muallifni qo'shing!</p></div>`;
-      return;
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      errEl.textContent = d.detail || "Username yoki parol noto'g'ri!";
+      errEl.style.display = 'block'; return;
     }
+    const { access_token } = await res.json();
+    saveToken(access_token, username);
+    enterApp(username);
+  } catch {
+    errEl.textContent = "Serverga ulanib bo'lmadi!"; errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = '🔑 Kirish';
+  }
+}
+
+async function doRegister() {
+  const first_name = document.getElementById('r-fn').value.trim();
+  const last_name  = document.getElementById('r-ln').value.trim();
+  const username   = document.getElementById('r-user').value.trim();
+  const password   = document.getElementById('r-pass').value;
+  const password2  = document.getElementById('r-pass2').value;
+  const errEl      = document.getElementById('reg-err');
+  const btn        = document.getElementById('reg-btn');
+
+  if (!first_name || !last_name || !username || !password) {
+    errEl.textContent = "Barcha maydonlarni to'ldiring!"; errEl.style.display = 'block'; return;
+  }
+  if (password !== password2) {
+    errEl.textContent = "Parollar mos kelmadi!"; errEl.style.display = 'block'; return;
+  }
+  errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = "⏳ Ro'yxatdan o'tilmoqda...";
+
+  try {
+    const res = await fetch(`${BASE}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ first_name, last_name, username, password })
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      errEl.textContent = d.detail || "Xatolik!"; errEl.style.display = 'block'; return;
+    }
+    toast("✅ Ro'yxatdan o'tdingiz!");
+    showAuthTab('login');
+    document.getElementById('l-user').value = username;
+  } catch {
+    errEl.textContent = "Serverga ulanib bo'lmadi!"; errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = "✚ Ro'yxatdan o'tish";
+  }
+}
+
+function enterApp(username) {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display  = 'block';
+  document.getElementById('h-name').textContent = username;
+  document.getElementById('h-ava').textContent  = username[0].toUpperCase();
+  loadAuthors().then(() => loadPosts());
+}
+
+function doLogout() {
+  clearToken(); currentUser = null;
+  document.getElementById('sess-banner').classList.remove('show');
+  document.getElementById('app-screen').style.display  = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('l-pass').value = '';
+  document.getElementById('login-err').style.display = 'none';
+}
+
+// ════════════════════════════════════════
+//  TABS
+// ════════════════════════════════════════
+function switchTab(tab) {
+  ['posts','authors'].forEach(t => {
+    document.getElementById(`nav-${t}`).classList.toggle('active', t === tab);
+    document.getElementById(`page-${t}`).classList.toggle('active', t === tab);
+  });
+  document.getElementById('post-form-section').style.display   = tab === 'posts'   ? '' : 'none';
+  document.getElementById('author-form-section').style.display = tab === 'authors' ? '' : 'none';
+  if (tab === 'authors') loadAuthors();
+}
+
+// ════════════════════════════════════════
+//  AUTHORS
+// ════════════════════════════════════════
+async function loadAuthors() {
+  try {
+    const res = await fetch(`${BASE}/users`, { headers: authH() });
+    if (await checkAuth(res)) return;
+    if (!res.ok) throw new Error();
+    authors = await res.json();
+    renderAuthors(); fillSelect();
+  } catch {
     document.getElementById('authors-container').innerHTML =
-      `<div class="grid">${authors.map(authorCard).join('')}</div>`;
+      `<div class="state"><span class="state-icon">⚠️</span><p>Mualliflar yuklanmadi.</p></div>`;
   }
+}
 
-  function authorCard(a) {
-    const initials = (a.first_name[0] + a.last_name[0]).toUpperCase();
-    return `
-      <div class="author-card">
-        <div class="avatar">${esc(initials)}</div>
-        <div class="author-info">
-          <h3>${esc(a.first_name)} ${esc(a.last_name)}</h3>
-          <span>ID: #${a.id}</span>
-        </div>
-        <button class="btn btn-delete btn-sm" onclick="deleteAuthor(${a.id})">🗑</button>
-      </div>`;
+function fillSelect() {
+  const sel = document.getElementById('p-author');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">— Muallif tanlang —</option>';
+  authors.forEach(a => {
+    const o = document.createElement('option');
+    o.value = a.id;
+    o.textContent = `${a.first_name} ${a.last_name} (@${a.username})`;
+    sel.appendChild(o);
+  });
+  if (prev) sel.value = prev;
+}
+
+function renderAuthors() {
+  document.getElementById('badge-authors').textContent = `${authors.length} ta`;
+  if (!authors.length) {
+    document.getElementById('authors-container').innerHTML =
+      `<div class="state"><span class="state-icon">👤</span><p>Hali mualliflar yo'q.</p></div>`;
+    return;
   }
+  document.getElementById('authors-container').innerHTML =
+    `<div class="grid">${authors.map(authorCard).join('')}</div>`;
+}
 
-  async function submitAuthor() {
-    const first_name = document.getElementById('inp-fn').value.trim();
-    const last_name  = document.getElementById('inp-ln').value.trim();
-    const errEl = document.getElementById('author-err');
+function authorCard(a) {
+  const initials = ((a.first_name||'?')[0] + (a.last_name||'?')[0]).toUpperCase();
+  return `
+    <div class="author-card">
+      <div class="ava">${esc(initials)}</div>
+      <div class="ava-info">
+        <div class="ava-name">${esc(a.first_name)} ${esc(a.last_name)}</div>
+        <div class="ava-username">@${esc(a.username || '')} · ID #${a.id}</div>
+      </div>
+      <button class="btn-del-sm" onclick="deleteAuthor(${a.id})">🗑</button>
+    </div>`;
+}
 
-    if (!first_name || !last_name) {
-      errEl.textContent = "Ism va familiya to'ldirilishi shart!";
-      errEl.style.display = 'block';
-      return;
+async function submitAuthor() {
+  const first_name = document.getElementById('a-fn').value.trim();
+  const last_name  = document.getElementById('a-ln').value.trim();
+  const username   = document.getElementById('a-user').value.trim();
+  const password   = document.getElementById('a-pass').value;
+  const errEl      = document.getElementById('author-err');
+
+  if (!first_name || !last_name || !username || !password) {
+    errEl.textContent = "Barcha maydonlarni to'ldiring!"; errEl.style.display = 'block'; return;
+  }
+  errEl.style.display = 'none';
+
+  try {
+    const res = await fetch(`${BASE}/register`, {
+      method: 'POST',
+      headers: authH(),
+      body: JSON.stringify({ first_name, last_name, username, password })
+    });
+    if (await checkAuth(res)) return;
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      errEl.textContent = d.detail || "Xatolik!"; errEl.style.display = 'block'; return;
     }
-    errEl.style.display = 'none';
+    ['a-fn','a-ln','a-user','a-pass'].forEach(id => document.getElementById(id).value = '');
+    toast("✅ Muallif qo'shildi!");
+    loadAuthors();
+  } catch { toast("❌ Xatolik!", 'err'); }
+}
 
-    try {
-      const res = await fetch(`${API}/users`, {
-        method: 'POST',
-        headers: authHeaders(),
-        body: JSON.stringify({ first_name, last_name })
-      });
-      if (handle401(res)) return;
-      if (!res.ok) throw new Error();
-      document.getElementById('inp-fn').value = '';
-      document.getElementById('inp-ln').value = '';
-      toast("✅ Muallif qo'shildi!");
-      loadAuthors();
-    } catch {
-      toast('❌ Xatolik yuz berdi!', true);
-    }
-  }
+async function deleteAuthor(id) {
+  if (!confirm("Bu muallifni o'chirishni xohlaysizmi?")) return;
+  try {
+    // Backend: DELETE /users{author_id}  (slash yo'q — backend xatosi, shunday yuboramiz)
+    const res = await fetch(`${BASE}/users${id}`, { method: 'DELETE', headers: authH() });
+    if (await checkAuth(res)) return;
+    toast("🗑 Muallif o'chirildi!");
+    loadAuthors();
+  } catch { toast("❌ Xatolik!", 'err'); }
+}
 
-  async function deleteAuthor(id) {
-    if (!confirm("Bu muallifni o'chirishni xohlaysizmi?")) return;
-    try {
-      const res = await fetch(`${API}/users/${id}`, {
-        method: 'DELETE',
-        headers: authHeaders()
-      });
-      if (handle401(res)) return;
-      toast("🗑 Muallif o'chirildi!");
-      loadAuthors();
-    } catch {
-      toast("❌ O'chirishda xatolik!", true);
-    }
-  }
-
-  // ════════════════════════════════════════════════
-  //  POSTS
-  // ════════════════════════════════════════════════
-  async function loadPosts() {
+// ════════════════════════════════════════
+//  POSTS
+// ════════════════════════════════════════
+async function loadPosts() {
+  document.getElementById('posts-container').innerHTML =
+    `<div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>`;
+  try {
+    const res = await fetch(`${BASE}/`, { headers: authH() });
+    if (await checkAuth(res)) return;
+    if (!res.ok) throw new Error();
+    renderPosts(await res.json());
+  } catch {
     document.getElementById('posts-container').innerHTML =
-      `<div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>`;
-    try {
-      const res = await fetch(`${API}/`, { headers: authHeaders() });
-      if (handle401(res)) return;
-      if (!res.ok) throw new Error();
-      renderPosts(await res.json());
-    } catch {
-      document.getElementById('posts-container').innerHTML =
-        `<div class="state">
-          <span class="state-icon">⚠️</span>
-          <p>Serverga ulanib bo'lmadi.<br><b>fastapi dev main.py</b> ishga tushiring.</p>
-        </div>`;
-    }
+      `<div class="state"><span class="state-icon">⚠️</span><p>Serverga ulanib bo'lmadi.<br><b>fastapi dev main.py</b> ishga tushiring.</p></div>`;
   }
+}
 
-  function getAuthor(id) {
-    return authors.find(a => a.id === id);
-  }
+function getAuthor(id) { return authors.find(a => a.id === id); }
 
-  function renderPosts(posts) {
-    document.getElementById('post-count').textContent  = `${posts.length} ta post`;
-    document.getElementById('badge-posts').textContent = posts.length;
-    if (!posts.length) {
-      document.getElementById('posts-container').innerHTML =
-        `<div class="state"><span class="state-icon">📭</span><p>Hali postlar yo'q.<br>Birinchi postni yarating!</p></div>`;
-      return;
-    }
+function renderPosts(posts) {
+  document.getElementById('badge-posts').textContent = `${posts.length} ta`;
+  if (!posts.length) {
     document.getElementById('posts-container').innerHTML =
-      `<div class="grid">${posts.map(postCard).join('')}</div>`;
+      `<div class="state"><span class="state-icon">📭</span><p>Hali postlar yo'q.<br>Birinchi postni yarating!</p></div>`;
+    return;
   }
+  document.getElementById('posts-container').innerHTML =
+    `<div class="grid">${posts.map(postCard).join('')}</div>`;
+}
 
-  function postCard(p) {
-    const a        = getAuthor(p.author_id);
-    const name     = a ? `${a.first_name} ${a.last_name}` : `#${p.author_id}`;
-    const initials = a ? (a.first_name[0] + a.last_name[0]).toUpperCase() : '?';
-    return `
-      <div class="post-card">
-        <div class="post-top">
-          <span class="post-id">#${p.id}</span>
-          <span class="author-chip">
-            <span class="author-chip-avatar">${esc(initials)}</span>
-            ${esc(name)}
-          </span>
+function postCard(p) {
+  const a        = getAuthor(p.author_id);
+  const name     = a ? `${a.first_name} ${a.last_name}` : `#${p.author_id}`;
+  const initials = a ? ((a.first_name||'?')[0] + (a.last_name||'?')[0]).toUpperCase() : '?';
+
+  const likeCnt = (p.likes || []).length;
+  const cmtCnt  = (p.comments || []).length;
+
+  const commentsHtml = (p.comments || []).map(c => {
+    const ca = getAuthor(c.author_id);
+    const cname = ca ? `${ca.first_name} ${ca.last_name}` : `#${c.author_id}`;
+    return `<div class="comment-item">
+      <div class="comment-author">@${esc(cname)}</div>
+      <div class="comment-text">${esc(c.content)}</div>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="post-card" id="pc-${p.id}">
+      <div class="post-meta">
+        <span class="post-id-chip">#${p.id}</span>
+        <span class="author-pill">
+          <span class="author-pill-dot">${esc(initials)}</span>
+          ${esc(name)}
+        </span>
+      </div>
+      <div class="post-title">${esc(p.title)}</div>
+      <div class="post-body">${esc(p.content)}</div>
+      ${p.image_path ? `<img src="${esc(p.image_path)}" style="width:100%;border-radius:8px;margin-top:4px;object-fit:cover;max-height:160px" onerror="this.style.display='none'"/>` : ''}
+      <div class="post-actions">
+        <button class="like-btn" id="like-${p.id}" onclick="toggleLike(${p.id})">
+          <span class="heart">❤️</span> <span id="lc-${p.id}">${likeCnt}</span>
+        </button>
+        <button class="comment-toggle" onclick="toggleComments(${p.id})">
+          💬 <span>${cmtCnt}</span>
+        </button>
+        <div class="spacer"></div>
+        <div class="edit-actions">
+          <button class="btn-edit-sm" onclick="startEdit(${p.id},\`${escJs(p.title)}\`,\`${escJs(p.content)}\`,\`${escJs(p.image_path||'')}\`,${p.author_id})">✏️</button>
+          <button class="btn-del-sm"  onclick="deletePost(${p.id})">🗑</button>
         </div>
-        <h3>${esc(p.title)}</h3>
-        <p>${esc(p.content)}</p>
-        <div class="card-actions">
-          <button class="btn btn-edit btn-sm"
-            onclick="startEdit(${p.id}, \`${escJs(p.title)}\`, \`${escJs(p.content)}\`, ${p.author_id})">
-            ✏️ Tahrirlash
-          </button>
-          <button class="btn btn-delete btn-sm" onclick="deletePost(${p.id})">
-            🗑 O'chirish
-          </button>
+      </div>
+      <div class="comments-wrap" id="cmts-${p.id}">
+        <div id="cmts-list-${p.id}">${commentsHtml || '<div style="font-size:12px;color:var(--muted)">Hali izohlar yo\'q.</div>'}</div>
+        <div class="comment-input-row">
+          <input id="cmti-${p.id}" type="text" placeholder="Izoh yozing..."/>
+          <button class="btn-send" onclick="sendComment(${p.id})">➤</button>
         </div>
-      </div>`;
+      </div>
+    </div>`;
+}
+
+async function submitPost() {
+  const title     = document.getElementById('p-title').value.trim();
+  const content   = document.getElementById('p-content').value.trim();
+  const image_path= document.getElementById('p-image').value.trim() || null;
+  const author_id = document.getElementById('p-author').value;
+  const errEl     = document.getElementById('post-err');
+  const btn       = document.getElementById('post-btn');
+
+  if (!title || !content || !author_id) {
+    errEl.textContent = "Sarlavha, matn va muallif majburiy!"; errEl.style.display = 'block'; return;
   }
+  errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = '⏳ Saqlanmoqda...';
 
-  async function submitPost() {
-    const title     = document.getElementById('inp-title').value.trim();
-    const content   = document.getElementById('inp-content').value.trim();
-    const author_id = document.getElementById('inp-author').value;
-    const errEl     = document.getElementById('post-err');
-    const btn       = document.getElementById('post-btn');
-
-    if (!title || !content || !author_id) {
-      errEl.textContent   = "Barcha maydonlarni to'ldiring!";
-      errEl.style.display = 'block';
-      return;
-    }
-    errEl.style.display = 'none';
-    btn.disabled    = true;
-    btn.textContent = '⏳ Saqlanmoqda...';
-
-    try {
-      const body = { title, content, author_id: Number(author_id) };
-
-      if (editingId) {
-        const res = await fetch(`${API}/${editingId}`, {
-          method: 'PUT',
-          headers: authHeaders(),
-          body: JSON.stringify({ ...body, id: editingId })
-        });
-        if (handle401(res)) return;
-        if (!res.ok) throw new Error();
-        toast('✅ Post yangilandi!');
-        cancelEdit();
-      } else {
-        const res = await fetch(`${API}/`, {
-          method: 'POST',
-          headers: authHeaders(),
-          body: JSON.stringify(body)
-        });
-        if (handle401(res)) return;
-        if (!res.ok) throw new Error();
-        toast('✅ Post yaratildi!');
-        clearPostForm();
-      }
-      loadPosts();
-    } catch {
-      toast('❌ Xatolik yuz berdi!', true);
-    } finally {
-      btn.disabled    = false;
-      btn.textContent = editingId ? '💾 Saqlash' : '✚ Yaratish';
-    }
-  }
-
-  async function deletePost(id) {
-    if (!confirm("Bu postni o'chirishni xohlaysizmi?")) return;
-    try {
-      const res = await fetch(`${API}/${id}`, {
-        method: 'DELETE',
-        headers: authHeaders()
+  try {
+    const body = { title, content, image_path, author_id: Number(author_id) };
+    let res;
+    if (editingId) {
+      res = await fetch(`${BASE}/${editingId}`, {
+        method: 'PUT', headers: authH(), body: JSON.stringify(body)
       });
-      if (handle401(res)) return;
-      toast("🗑 Post o'chirildi!");
-      loadPosts();
-    } catch {
-      toast("❌ O'chirishda xatolik!", true);
+    } else {
+      res = await fetch(`${BASE}/`, {
+        method: 'POST', headers: authH(), body: JSON.stringify(body)
+      });
     }
+    if (await checkAuth(res)) return;
+    if (!res.ok) throw new Error();
+    toast(editingId ? '✅ Post yangilandi!' : '✅ Post yaratildi!');
+    cancelEdit(); loadPosts();
+  } catch { toast('❌ Xatolik!', 'err'); }
+  finally {
+    btn.disabled = false;
+    btn.textContent = editingId ? '💾 Saqlash' : '✚ Yaratish';
   }
+}
 
-  function startEdit(id, title, content, author_id) {
-    editingId = id;
-    document.getElementById('inp-title').value   = title;
-    document.getElementById('inp-content').value = content;
-    document.getElementById('inp-author').value  = author_id;
-    document.getElementById('post-form-title').textContent = '✏️ Postni Tahrirlash';
-    document.getElementById('post-btn').textContent        = '💾 Saqlash';
-    document.getElementById('post-cancel').style.display  = 'flex';
-    document.getElementById('sidebar').classList.add('editing');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+async function deletePost(id) {
+  if (!confirm("Bu postni o'chirishni xohlaysizmi?")) return;
+  try {
+    const res = await fetch(`${BASE}/${id}`, { method: 'DELETE', headers: authH() });
+    if (await checkAuth(res)) return;
+    toast("🗑 Post o'chirildi!");
+    loadPosts();
+  } catch { toast("❌ Xatolik!", 'err'); }
+}
 
-  function cancelEdit() {
-    editingId = null;
-    clearPostForm();
-    document.getElementById('post-form-title').textContent = '➕ Yangi Post';
-    document.getElementById('post-btn').textContent        = '✚ Yaratish';
-    document.getElementById('post-cancel').style.display  = 'none';
-    document.getElementById('sidebar').classList.remove('editing');
-  }
+function startEdit(id, title, content, image_path, author_id) {
+  editingId = id;
+  document.getElementById('p-title').value   = title;
+  document.getElementById('p-content').value = content;
+  document.getElementById('p-image').value   = image_path;
+  document.getElementById('p-author').value  = author_id;
+  document.getElementById('pf-title').textContent  = '✏️ Postni Tahrirlash';
+  document.getElementById('post-btn').textContent   = '💾 Saqlash';
+  document.getElementById('post-cancel').style.display = 'flex';
+  document.getElementById('sidebar').classList.add('editing');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-  function clearPostForm() {
-    document.getElementById('inp-title').value   = '';
-    document.getElementById('inp-content').value = '';
-    document.getElementById('inp-author').value  = '';
-    document.getElementById('post-err').style.display = 'none';
-  }
+function cancelEdit() {
+  editingId = null;
+  ['p-title','p-content','p-image'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('p-author').value = '';
+  document.getElementById('post-err').style.display = 'none';
+  document.getElementById('pf-title').textContent  = '➕ Yangi Post';
+  document.getElementById('post-btn').textContent   = '✚ Yaratish';
+  document.getElementById('post-cancel').style.display = 'none';
+  document.getElementById('sidebar').classList.remove('editing');
+}
 
-  // ════════════════════════════════════════════════
-  //  HELPERS
-  // ════════════════════════════════════════════════
-  function esc(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-  function escJs(s) {
-    return String(s||'').replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
-  }
-
-  // ════════════════════════════════════════════════
-  //  INIT — Sahifa yuklanganda token borligini tekshir
-  // ════════════════════════════════════════════════
-  (function init() {
-    const token    = getToken();
-    const username = localStorage.getItem('username') || 'User';
-
-    if (token) {
-      // Token muddatini tekshirish
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        if (payload.exp && payload.exp * 1000 < Date.now()) {
-          // Token allaqachon eskirgan
-          clearToken();
-          return; // auth screen ko'rinadi
-        }
-        const msLeft = payload.exp * 1000 - Date.now();
-        scheduleTokenExpiry(msLeft);
-      } catch (e) { /* token o'qilmasa — auth screen */ clearToken(); return; }
-
-      enterApp(username);
+// ════════════════════════════════════════
+//  LIKE
+// ════════════════════════════════════════
+async function toggleLike(postId) {
+  try {
+    const res = await fetch(`${BASE}/like/${postId}`, {
+      method: 'POST', headers: authH()
+    });
+    if (await checkAuth(res)) return;
+    if (res.status === 400) {
+      toast('❤️ Allaqachon like bosilgan!', 'err'); return;
     }
-    // Aks holda auth-screen default ko'rinadi
-  })();
+    if (!res.ok) throw new Error();
+    // like count ni +1 qilamiz (optimistic)
+    const el = document.getElementById(`lc-${postId}`);
+    const btn = document.getElementById(`like-${postId}`);
+    if (el) el.textContent = parseInt(el.textContent || 0) + 1;
+    if (btn) btn.classList.add('liked');
+    toast('❤️ Like bosildi!');
+  } catch { toast('❌ Xatolik!', 'err'); }
+}
+
+// ════════════════════════════════════════
+//  COMMENTS
+// ════════════════════════════════════════
+function toggleComments(postId) {
+  const el = document.getElementById(`cmts-${postId}`);
+  el.classList.toggle('open');
+}
+
+async function sendComment(postId) {
+  const input = document.getElementById(`cmti-${postId}`);
+  const text  = input.value.trim();
+  if (!text) return;
+
+  try {
+    // Backend: POST /comment/{post_id}?comment=...
+    const res = await fetch(`${BASE}/comment/${postId}?comment=${encodeURIComponent(text)}`, {
+      method: 'POST', headers: authH()
+    });
+    if (await checkAuth(res)) return;
+    if (!res.ok) throw new Error();
+    const c = await res.json();
+    input.value = '';
+
+    // DOM ga qo'shamiz
+    const listEl = document.getElementById(`cmts-list-${postId}`);
+    const a      = getAuthor(c.author_id);
+    const cname  = a ? `${a.first_name} ${a.last_name}` : `#${c.author_id}`;
+    const div    = document.createElement('div');
+    div.className = 'comment-item';
+    div.innerHTML = `<div class="comment-author">@${esc(cname)}</div><div class="comment-text">${esc(c.content)}</div>`;
+    listEl.appendChild(div);
+    toast('💬 Izoh qo\'shildi!');
+  } catch { toast('❌ Izoh yuborishda xatolik!', 'err'); }
+}
+
+// Enter key for comment
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const active = document.activeElement;
+  if (active && active.id && active.id.startsWith('cmti-')) {
+    const postId = parseInt(active.id.split('-')[1]);
+    sendComment(postId);
+  }
+});
+
+// ════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════
+function esc(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escJs(s) {
+  return String(s||'').replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+}
+
+// ════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════
+(function init() {
+  const token    = getToken();
+  const username = getUsername();
+  if (!token) return;
+  try {
+    const {exp} = JSON.parse(atob(token.split('.')[1]));
+    if (exp && exp * 1000 < Date.now()) { clearToken(); return; }
+    scheduleExpiry(token);
+  } catch { clearToken(); return; }
+  enterApp(username);
+})();
 </script>
-<script src="script.js"></script>
 </body>
 </html>

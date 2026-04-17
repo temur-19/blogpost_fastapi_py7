@@ -7,9 +7,9 @@ from sqlalchemy.orm import Session
 from typing import List
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from schemas import PostOut,PostCreate, PostUpdate, AuthorCreate,AuthorOut,Token
+from schemas import PostOut, PostCreate, PostUpdate, AuthorCreate, AuthorOut, Token, LikeCreate, LikeOut, CommentCreate, CommentOut
 from database import Base, engine,get_db
-from models import Posts,Author
+from models import Posts,Author,Like,Comment
 
 
 Base.metadata.create_all(bind=engine)
@@ -40,7 +40,7 @@ def get_current_user(token: str = Depends(oauth2_schema), db: Session = Depends(
 
 @api_router.post('/register',response_model=AuthorOut)
 def author_creat(author_in:AuthorCreate, db:Session = Depends(get_db)):
-    author = db.scalar(select(Author).where(Author.first_name == author_in.first_name, Author.last_name == author_in.last_name))
+    author = db.scalar(select(Author).where(Author.username == author_in.username))
     if author:
         raise HTTPException(status_code=404, detail='Bunday foydalanuvchi mavjud')
     
@@ -152,3 +152,32 @@ def  delete_post(post_id:int, db = Depends(get_db)):
     db.delete(post)
     db.commit()
     return {'status':404}
+
+@api_router.post('/like/{post_id}', response_model=LikeOut)
+def like_post(post_id:int, db = Depends(get_db), current_user: AuthorOut = Depends(get_current_user)):
+    stmt = select(Posts).where(Posts.id == post_id)
+    post = db.scalar(stmt)
+    if not post:
+        raise HTTPException(status_code=404, detail=f'{post_id}-post mavjud emas')
+    like = select(Like).where(Like.post_id == post_id,Like.author_id == current_user.id)
+    if db.scalar(like):
+        raise HTTPException(status_code=400, detail=f'{post_id}-postga allaqachon like bosilgan')
+    like = Like(post_id=post_id, author_id=current_user.id)
+    db.add(like)
+    db.commit()
+    db.refresh(like)
+    return like
+
+
+@api_router.post('/comment/{post_id}', response_model=CommentOut)
+def comment_post(post_id:int, comment:str, db = Depends(get_db), current_user: AuthorOut = Depends(get_current_user)):
+    stmt = select(Posts).where(Posts.id == post_id)
+    post = db.scalar(stmt)
+    if not post:
+        raise HTTPException(status_code=404, detail=f'{post_id}-post mavjud emas')
+    
+    comment = Comment(content=comment, post_id=post_id, author_id=current_user.id)
+    db.add(comment)
+    db.commit()
+    db.refresh(comment)
+    return comment
