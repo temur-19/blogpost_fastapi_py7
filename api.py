@@ -1,11 +1,13 @@
 import jwt
+import asyncio
 import security
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession as Session
-from fastapi import Depends, HTTPException, status, APIRouter
+from fastapi import Depends, HTTPException, status, APIRouter, BackgroundTasks
 from fastapi.security import OAuth2AuthorizationCodeBearer, OAuth2PasswordRequestForm
 from typing import List
+from email_servis import send_welcome_email, send_telegram_message
 
 
 from schemas import PostOut, PostCreate, PostUpdate, AuthorCreate, AuthorOut, Token, LikeCreate, LikeOut, CommentCreate, CommentOut
@@ -39,7 +41,7 @@ async def get_current_user(token: str = Depends(oauth2_schema), db: Session = De
 
 
 @api_router.post('/register',response_model=AuthorOut)
-async def author_creat(author_in:AuthorCreate, db:Session = Depends(get_db)):
+async def author_creat(bg_tasks: BackgroundTasks, author_in:AuthorCreate, db:Session = Depends(get_db)):
     author = await db.scalar(select(Author).where(Author.username == author_in.username))
     if author:
         raise HTTPException(status_code=404, detail='Bunday foydalanuvchi mavjud')
@@ -49,11 +51,17 @@ async def author_creat(author_in:AuthorCreate, db:Session = Depends(get_db)):
     first_name=author_in.first_name,
     last_name=author_in.last_name,
     hashed_password = security.get_password_hash(author_in.password))
-    print(author)
-    await db.add(author)
+    db.add(author)
     await db.commit()
     await db.refresh(author)
+    bg_tasks.add_task(send_welcome_email, f"{author.username}@gmail.com")
     return author
+
+
+@api_router.post('/users/send_telegram_message')
+async def send_telegram_message_endpoint(chat_id: str, message: str, bg_tasks: BackgroundTasks):
+    bg_tasks.add_task(send_telegram_message, chat_id, message)
+    return {"status": "Message sent"}
 
 @api_router.post('/token', response_model=Token)
 async def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -76,7 +84,8 @@ async def get_current_user_profile(current_user: AuthorOut = Depends(get_current
 @api_router.get('/users', response_model=List[AuthorOut])
 async def get_authors(db: Session = Depends(get_db)):
     stmt = select(Author)
-    authors = db.scalars(stmt).all()
+    result = db.scalars(stmt)
+    authors = result.all()
     return authors
 
 @api_router.delete('/users{author_id}')
@@ -101,7 +110,7 @@ async def post_creat(post_in:PostCreate, db = Depends(get_db)):
     
     post  = Posts(**post_in.model_dump())
 
-    await db.add(post)
+    db.add(post)
     await db.commit()
     await db.refresh(post)
 
@@ -111,7 +120,8 @@ async def post_creat(post_in:PostCreate, db = Depends(get_db)):
 @api_router.get('/', response_model=List[PostOut])
 async def post_out(db = Depends(get_db)):
     stmt = select(Posts)
-    posts = await db.scalars(stmt).all()
+    result = await db.scalars(stmt)
+    posts = result.all()
     return posts
 
 
@@ -137,7 +147,7 @@ async def update_post(post_id:int, post_in: PostUpdate, db = Depends(get_db),):
     post.content = post_in.content
     post.image_path = post_in.image_path
 
-    await db.add(post)
+    db.add(post)
     await db.commit()
     await db.refresh(post)
     return post
@@ -163,7 +173,7 @@ async def like_post(post_id:int, db = Depends(get_db), current_user: AuthorOut =
     if await db.scalar(like):
         raise HTTPException(status_code=400, detail=f'{post_id}-postga allaqachon like bosilgan')
     like = Like(post_id=post_id, author_id=current_user.id)
-    await db.add(like)
+    db.add(like)
     await db.commit()
     await db.refresh(like)
     return like
@@ -177,7 +187,7 @@ async def comment_post(post_id:int, comment:str, db = Depends(get_db), current_u
         raise HTTPException(status_code=404, detail=f'{post_id}-post mavjud emas')
     
     comment = Comment(content=comment, post_id=post_id, author_id=current_user.id)
-    await db.add(comment)
+    db.add(comment)
     await db.commit()
     await db.refresh(comment)
     return comment
@@ -192,5 +202,5 @@ async def get_comments(post_id:int, db = Depends(get_db)):
 @api_router.get('/likes/{post_id}', response_model=int)
 async def get_likes(post_id:int, db = Depends(get_db)):
     stmt = select(Like).where(Like.post_id == post_id)
-    likes = await db.scalars(stmt).all()
-    return len(likes)
+    likes = await db.scalars(stmt)
+    return len(likes.all())
