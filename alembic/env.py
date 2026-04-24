@@ -22,6 +22,18 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from database import Base
 import models # noqa: F401
 target_metadata = Base.metadata
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    config.set_main_option(
+        "sqlalchemy.url",
+        DATABASE_URL.replace("+aiosqlite", "")
+    )
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
