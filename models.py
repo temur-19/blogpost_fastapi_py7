@@ -18,6 +18,7 @@ class Author(Base):
     gender: Mapped[str] = mapped_column(String(length=10), nullable=True)
     comment:Mapped[List['Comment']] = relationship(back_populates='auth', cascade='all, delete-orphan')
     like:Mapped[List[   'Like']] = relationship(back_populates='auth', cascade='all, delete-orphan')
+    user_avatar: Mapped[str] = mapped_column(String(length=200), nullable=True)
 
 class Posts(Base):
     __tablename__ = 'posts'

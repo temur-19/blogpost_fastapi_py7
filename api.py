@@ -1,11 +1,12 @@
 import jwt
 import asyncio
 import security
+import shutil
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession as Session
-from fastapi import Depends, HTTPException, status, APIRouter, BackgroundTasks
-from fastapi.security import OAuth2AuthorizationCodeBearer, OAuth2PasswordRequestForm
+from fastapi import Depends, HTTPException, status, APIRouter, BackgroundTasks,UploadFile,File
+from fastapi.security import OAuth2AuthorizationCodeBearer, OAuth2PasswordRequestForm,OAuth2PasswordBearer
 from typing import List
 from email_servis import send_welcome_email, send_telegram_message
 
@@ -18,7 +19,7 @@ from models import Posts,Author,Like,Comment
 api_router = APIRouter(prefix='/api/posts')
 
 
-oauth2_schema = OAuth2AuthorizationCodeBearer(authorizationUrl="/users/login", tokenUrl="/users/login")
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="api/posts/token")
 
 async def get_current_user(token: str = Depends(oauth2_schema), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -39,6 +40,24 @@ async def get_current_user(token: str = Depends(oauth2_schema), db: Session = De
 
     return author
 
+
+@api_router.post('/users/upload_avatar/')
+async def upload_avatar(file: UploadFile = File(...),
+                        current_user: AuthorOut = Depends(get_current_user),
+                        db: Session = Depends(get_db)):
+    from main import UPLOAD_FOLDER
+    file_extension = file.filename.split(".")[-1]
+    file_location = f"{UPLOAD_FOLDER}/{current_user.id}_avatar.{file_extension}"
+    static_location = f"/static/{current_user.id}_avatar.{file_extension}"
+
+    with open(file_location, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    current_user.user_avatar = static_location
+    db.add(current_user)
+    await db.commit()
+    await db.refresh(current_user)
+    return current_user
 
 @api_router.post('/register',response_model=AuthorOut)
 async def author_creat(bg_tasks: BackgroundTasks, author_in:AuthorCreate, db:Session = Depends(get_db)):
@@ -69,12 +88,12 @@ async def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
     if not user:
         raise HTTPException(status_code=400, detail="Bunday foydalanuvchi mavjud emas")
 
-    if not await security.verify_password(form.password, user.hashed_password):
+    if not security.verify_password(form.password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Username yoki parol noto'g'ri")
 
     access_token = security.create_access_token(data={"sub": str(user.id)})
     return {"access_token": access_token, "token_type": "bearer"}
-
+ 
 
 @api_router.post('/users/me', response_model=AuthorOut)
 async def get_current_user_profile(current_user: AuthorOut = Depends(get_current_user)):

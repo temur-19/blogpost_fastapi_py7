@@ -213,3 +213,4 @@ db.sqlite3
 .env
 .idea/
 .vscode/
+uploads/

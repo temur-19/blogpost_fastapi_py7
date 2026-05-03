@@ -74,8 +74,19 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .nav-btn:hover{color:var(--text);background:var(--surface2)}
 .nav-btn.active{color:var(--accent);background:rgba(245,197,66,.1)}
 .topbar-right{display:flex;align-items:center;gap:10px}
-.user-pill{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);padding:5px 14px 5px 6px;border-radius:99px;font-size:13px;font-weight:500}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;flex-shrink:0}
+.user-pill{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);padding:5px 14px 5px 6px;border-radius:99px;font-size:13px;font-weight:500;cursor:pointer;transition:border-color .2s}
+.user-pill:hover{border-color:rgba(245,197,66,.4)}
+
+/* AVATAR — topbar */
+.user-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--accent);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:13px;font-weight:700;
+  flex-shrink:0;overflow:hidden;
+}
+.user-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
 .btn-logout-pill{background:rgba(224,92,92,.15);border:1px solid rgba(224,92,92,.3);color:#e05c5c;padding:6px 14px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-logout-pill:hover{background:rgba(224,92,92,.25)}
 
@@ -101,7 +112,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .post-meta{display:flex;align-items:center;justify-content:space-between}
 .post-id-chip{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
 .author-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(92,158,255,.1);border:1px solid rgba(92,158,255,.2);color:var(--blue);padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
-.author-pill-dot{width:16px;height:16px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800}
+.author-pill-dot{width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;overflow:hidden;flex-shrink:0}
+.author-pill-dot img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .post-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);line-height:1.3}
 .post-body{font-size:13px;color:var(--muted);line-height:1.65;flex:1}
 .post-actions{display:flex;align-items:center;gap:8px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap}
@@ -125,19 +137,101 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .btn-send{background:var(--accent);color:#000;border:none;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;flex-shrink:0}
 .btn-send:hover{background:#f0b800}
 
+/* ME CARD — avatar upload */
+.me-card{
+  background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);
+  border-radius:var(--radius);padding:14px;display:none;
+  flex-direction:column;gap:10px;margin-bottom:16px;
+}
+.me-card-row{display:flex;align-items:center;gap:10px}
+.me-card-ava-wrap{position:relative;width:42px;height:42px;flex-shrink:0}
+.me-card-ava{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--accent);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:16px;font-weight:900;
+  overflow:hidden;cursor:pointer;
+  border:2px solid transparent;transition:border-color .2s;
+}
+.me-card-ava:hover{border-color:var(--accent)}
+.me-card-ava img{width:100%;height:100%;object-fit:cover}
+.ava-upload-badge{
+  position:absolute;bottom:-2px;right:-2px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--accent);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;cursor:pointer;border:1.5px solid var(--surface);
+}
+.me-card-info{flex:1}
+.me-card-name{font-size:13px;font-weight:600;color:var(--text)}
+.me-card-sub{font-size:11px;color:var(--muted)}
+
+/* Avatar upload progress */
+.ava-progress{
+  background:var(--surface2);border-radius:6px;overflow:hidden;height:4px;display:none;
+}
+.ava-progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
+
 /* AUTHOR CARD */
 .author-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;gap:14px;transition:transform .2s,border-color .2s;animation:popIn .35s cubic-bezier(.22,1,.36,1) both}
 .author-card:hover{transform:translateY(-3px);border-color:rgba(92,158,255,.25)}
-.ava{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#f0a500);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;font-weight:900;flex-shrink:0}
+.ava{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#f0a500);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:20px;font-weight:900;
+  flex-shrink:0;overflow:hidden;
+}
+.ava img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .ava-info{flex:1}
 .ava-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text)}
 .ava-username{font-size:12px;color:var(--muted)}
 
-/* ME CARD */
-.me-card{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.me-card-ava{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:900;flex-shrink:0}
-.me-card-name{font-size:13px;font-weight:600;color:var(--text)}
-.me-card-sub{font-size:11px;color:var(--muted)}
+/* PROFILE MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
+  z-index:200;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--surface);border:1px solid var(--border);border-radius:22px;
+  padding:32px;width:100%;max-width:380px;box-shadow:var(--shadow);
+  transform:scale(.93);transition:transform .25s;
+}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px}
+.modal-ava-wrap{display:flex;justify-content:center;margin-bottom:20px;position:relative;width:fit-content;margin-inline:auto}
+.modal-ava{
+  width:90px;height:90px;border-radius:50%;
+  background:var(--accent);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:36px;font-weight:900;
+  overflow:hidden;border:3px solid var(--accent);
+}
+.modal-ava img{width:100%;height:100%;object-fit:cover}
+.modal-ava-btn{
+  position:absolute;bottom:2px;right:2px;
+  background:var(--accent);color:#000;border:2px solid var(--surface);
+  width:28px;height:28px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  transition:background .2s;
+}
+.modal-ava-btn:hover{background:#f0b800}
+.modal-info{text-align:center;margin-bottom:20px}
+.modal-info-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text)}
+.modal-info-user{font-size:13px;color:var(--muted);margin-top:3px}
+.modal-upload-section{margin-bottom:16px}
+.upload-drop{
+  border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;
+  cursor:pointer;transition:all .2s;color:var(--muted);font-size:13px;
+}
+.upload-drop:hover,.upload-drop.drag{border-color:var(--accent);background:rgba(245,197,66,.05);color:var(--accent)}
+.upload-drop-icon{font-size:28px;margin-bottom:6px}
+.modal-progress{background:var(--surface2);border-radius:6px;overflow:hidden;height:6px;margin-top:10px;display:none}
+.modal-progress-bar{height:100%;background:var(--accent);width:0%;transition:width .4s}
+.modal-close{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:9px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;margin-top:4px}
+.modal-close:hover{color:var(--text)}
 
 /* STATE */
 .state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:14px;color:var(--muted);text-align:center}
@@ -155,6 +249,9 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 /* SESSION BANNER */
 .session-banner{display:none;background:rgba(245,197,66,.08);border-bottom:1px solid rgba(245,197,66,.2);color:var(--accent);text-align:center;padding:8px 20px;font-size:13px;font-weight:600}
 .session-banner.show{display:block}
+
+/* Hidden file input */
+#avatar-file-input{display:none}
 
 @media(max-width:820px){
   .layout{grid-template-columns:1fr}
@@ -193,6 +290,40 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   </div>
 </div>
 
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profile-modal" onclick="closeProfileModal(event)">
+  <div class="modal">
+    <div class="modal-title">👤 Profilim</div>
+    <div class="modal-ava-wrap">
+      <div class="modal-ava" id="modal-ava-display">U</div>
+      <button class="modal-ava-btn" onclick="document.getElementById('avatar-file-input').click()" title="Rasm yuklash">📷</button>
+    </div>
+    <div class="modal-info">
+      <div class="modal-info-name" id="modal-full-name">—</div>
+      <div class="modal-info-user" id="modal-username">@—</div>
+    </div>
+    <div class="modal-upload-section">
+      <div class="upload-drop" id="upload-drop"
+           onclick="document.getElementById('avatar-file-input').click()"
+           ondragover="event.preventDefault();this.classList.add('drag')"
+           ondragleave="this.classList.remove('drag')"
+           ondrop="handleDrop(event)">
+        <div class="upload-drop-icon">🖼️</div>
+        <div>Rasm yuklash uchun bosing yoki tashlang</div>
+        <div style="font-size:11px;margin-top:4px;opacity:.6">JPG, PNG, WEBP · max 5MB</div>
+      </div>
+      <div class="modal-progress" id="modal-progress">
+        <div class="modal-progress-bar" id="modal-progress-bar"></div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeProfileModal()">✕ Yopish</button>
+  </div>
+</div>
+
+<!-- Hidden file input -->
+<input type="file" id="avatar-file-input" accept="image/jpeg,image/png,image/gif,image/webp"
+       onchange="uploadAvatar(this.files[0])"/>
+
 <!-- APP -->
 <div id="app-screen">
   <div class="session-banner" id="sess-banner">⚠️ Sessiyangiz 2 daqiqada tugaydi. Qayta kiring!</div>
@@ -203,7 +334,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
       <button class="nav-btn"        id="nav-authors" onclick="switchTab('authors')">👤 Mualliflar</button>
     </div>
     <div class="topbar-right">
-      <div class="user-pill">
+      <!-- Profil pill — bosilsa modal ochiladi -->
+      <div class="user-pill" onclick="openProfileModal()" title="Profilni ko'rish / rasm yuklash">
         <div class="user-avatar" id="h-ava">U</div>
         <span id="h-name">User</span>
       </div>
@@ -215,13 +347,23 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
     <aside class="sidebar" id="sidebar">
       <!-- POST FORM -->
       <div id="post-form-section">
-        <div class="me-card" id="me-card" style="display:none">
-          <div class="me-card-ava" id="me-ava">U</div>
-          <div>
-            <div class="me-card-name" id="me-name">—</div>
-            <div class="me-card-sub"  id="me-username">@—</div>
+        <!-- ME CARD -->
+        <div class="me-card" id="me-card">
+          <div class="me-card-row">
+            <div class="me-card-ava-wrap">
+              <div class="me-card-ava" id="me-ava" onclick="openProfileModal()" title="Rasm o'zgartirish">U</div>
+              <div class="ava-upload-badge" onclick="openProfileModal()">📷</div>
+            </div>
+            <div class="me-card-info">
+              <div class="me-card-name" id="me-name">—</div>
+              <div class="me-card-sub"  id="me-username">@—</div>
+            </div>
+          </div>
+          <div class="ava-progress" id="ava-progress">
+            <div class="ava-progress-bar" id="ava-progress-bar"></div>
           </div>
         </div>
+
         <div class="sidebar-title" id="pf-title">➕ Yangi Post</div>
         <div class="ferr" id="post-err"></div>
         <div class="field"><label>Sarlavha</label><input id="p-title" type="text" placeholder="Post sarlavhasi..." maxlength="100"/></div>
@@ -275,7 +417,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 const BASE = 'http://localhost:8000/api/posts';
 let authors = [], editingId = null, expiryTimer = null, currentUser = null;
 
-/* TOKEN */
+/* ─── TOKEN ─────────────────────────────── */
 function saveToken(t, u) { localStorage.setItem('ph_token', t); localStorage.setItem('ph_user', u); scheduleExpiry(t); }
 function getToken()    { return localStorage.getItem('ph_token'); }
 function getUsername() { return localStorage.getItem('ph_user') || 'User'; }
@@ -292,14 +434,14 @@ function scheduleExpiry(token) {
 function authH(extra = {}) { return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}`, ...extra }; }
 async function checkAuth(res) { if (res.status === 401) { toast('🔒 Sessiya tugadi', 'err'); doLogout(); return true; } return false; }
 
-/* TOAST */
+/* ─── TOAST ──────────────────────────────── */
 function toast(msg, type = 'ok') {
   const el = document.getElementById('toast');
   el.textContent = msg; el.className = `toast show ${type}`;
   setTimeout(() => (el.className = 'toast'), 3000);
 }
 
-/* AUTH UI */
+/* ─── AUTH UI ────────────────────────────── */
 function showAuthTab(tab) {
   document.getElementById('login-form').style.display    = tab === 'login'    ? '' : 'none';
   document.getElementById('register-form').style.display = tab === 'register' ? '' : 'none';
@@ -366,26 +508,133 @@ async function enterApp(username) {
   document.getElementById('h-name').textContent = username;
   document.getElementById('h-ava').textContent  = username[0].toUpperCase();
   try {
-    /* POST /users/me — backend shu HTTP method dan foydalanadi */
     const res = await fetch(`${BASE}/users/me`, { method: 'POST', headers: authH() });
-    if (res.ok) { currentUser = await res.json(); showMeCard(); }
+    if (res.ok) {
+      currentUser = await res.json();
+      showMeCard();
+    }
   } catch {}
   await loadAuthors();
   loadPosts();
 }
 
-function showMeCard() {
-  if (!currentUser) return;
-  const ini = ((currentUser.first_name||'?')[0] + (currentUser.last_name||'?')[0]).toUpperCase();
-  document.getElementById('me-ava').textContent      = ini;
-  document.getElementById('me-name').textContent     = `${currentUser.first_name} ${currentUser.last_name}`;
-  document.getElementById('me-username').textContent = `@${currentUser.username}`;
-  document.getElementById('me-card').style.display   = 'flex';
+/* ─── AVATAR HELPERS ────────────────────── */
+/**
+ * avatarEl — DOM element (.user-avatar, .me-card-ava, .ava, .modal-ava)
+ * url       — /static/... yoki null
+ * initials  — fallback harflar
+ */
+function setAvatarEl(el, url, initials) {
+  if (!el) return;
+  if (url) {
+    el.innerHTML = `<img src="http://localhost:8000${url}" alt="avatar" onerror="this.parentElement.innerHTML='${esc(initials)}'"/>`;
+  } else {
+    el.innerHTML = esc(initials);
+  }
 }
 
+function getUserInitials(u) {
+  if (!u) return '?';
+  return ((u.first_name || '?')[0] + (u.last_name || '?')[0]).toUpperCase();
+}
+
+function showMeCard() {
+  if (!currentUser) return;
+  const ini = getUserInitials(currentUser);
+  const url = currentUser.user_avatar || null;
+
+  /* topbar */
+  setAvatarEl(document.getElementById('h-ava'), url, ini);
+
+  /* sidebar me-card */
+  setAvatarEl(document.getElementById('me-ava'), url, ini);
+  document.getElementById('me-name').textContent     = `${currentUser.first_name || ''} ${currentUser.last_name || ''}`;
+  document.getElementById('me-username').textContent = `@${currentUser.username || ''}`;
+  document.getElementById('me-card').style.display   = 'flex';
+
+  /* modal */
+  setAvatarEl(document.getElementById('modal-ava-display'), url, ini);
+  document.getElementById('modal-full-name').textContent = `${currentUser.first_name || ''} ${currentUser.last_name || ''}`;
+  document.getElementById('modal-username').textContent  = `@${currentUser.username || ''}`;
+}
+
+/* ─── PROFILE MODAL ─────────────────────── */
+function openProfileModal() {
+  document.getElementById('profile-modal').classList.add('open');
+}
+function closeProfileModal(e) {
+  if (!e || e.target === document.getElementById('profile-modal'))
+    document.getElementById('profile-modal').classList.remove('open');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-drop').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadAvatar(file);
+}
+
+/* ─── AVATAR UPLOAD ─────────────────────── */
+async function uploadAvatar(file) {
+  if (!file) return;
+  const MAX = 5 * 1024 * 1024;
+  const ALLOWED = ['image/jpeg','image/png','image/gif','image/webp'];
+  if (!ALLOWED.includes(file.type)) { toast('❌ Faqat rasm fayllari qabul qilinadi!', 'err'); return; }
+  if (file.size > MAX)              { toast('❌ Fayl hajmi 5MB dan oshmasligi kerak!', 'err'); return; }
+
+  /* Progress ko'rsatish */
+  const progWrap = document.getElementById('ava-progress');
+  const progBar  = document.getElementById('ava-progress-bar');
+  const mProg    = document.getElementById('modal-progress');
+  const mBar     = document.getElementById('modal-progress-bar');
+  progWrap.style.display = 'block'; progBar.style.width = '30%';
+  mProg.style.display    = 'block'; mBar.style.width    = '30%';
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    /* Content-Type ni FormData o'zi belgilaydi (multipart/form-data) */
+    const res = await fetch(`${BASE}/users/upload_avatar/`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${getToken()}` },
+      body: formData
+    });
+
+    progBar.style.width = '80%'; mBar.style.width = '80%';
+
+    if (await checkAuth(res)) return;
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      toast(`❌ ${d.detail || "Rasm yuklanmadi!"}`, 'err'); return;
+    }
+
+    const updated = await res.json(); // yangilangan AuthorOut
+    currentUser = updated;
+    progBar.style.width = '100%'; mBar.style.width = '100%';
+
+    showMeCard();
+    /* authors ro'yxatini ham yangilash */
+    const idx = authors.findIndex(a => a.id === currentUser.id);
+    if (idx !== -1) authors[idx] = currentUser;
+    renderAuthors();
+
+    toast('✅ Profil rasmi yangilandi!');
+  } catch { toast('❌ Yuklashda xatolik!', 'err'); }
+  finally {
+    setTimeout(() => {
+      progWrap.style.display = 'none'; progBar.style.width = '0%';
+      mProg.style.display    = 'none'; mBar.style.width    = '0%';
+    }, 800);
+    /* input ni tozalash — bir xil faylni qayta tanlasa ham ishlaydi */
+    document.getElementById('avatar-file-input').value = '';
+  }
+}
+
+/* ─── LOGOUT ─────────────────────────────── */
 function doLogout() {
   clearToken(); currentUser = null;
   document.getElementById('sess-banner').classList.remove('show');
+  document.getElementById('profile-modal').classList.remove('open');
   document.getElementById('app-screen').style.display  = 'none';
   document.getElementById('auth-screen').style.display = 'flex';
   document.getElementById('me-card').style.display     = 'none';
@@ -393,7 +642,7 @@ function doLogout() {
   document.getElementById('login-err').style.display = 'none';
 }
 
-/* TABS */
+/* ─── TABS ───────────────────────────────── */
 function switchTab(tab) {
   ['posts','authors'].forEach(t => {
     document.getElementById(`nav-${t}`).classList.toggle('active', t === tab);
@@ -404,9 +653,10 @@ function switchTab(tab) {
   if (tab === 'authors') loadAuthors();
 }
 
-/* AUTHORS */
+/* ─── AUTHORS ────────────────────────────── */
 async function loadAuthors() {
   try {
+    /* ✅ TO'G'RILANDI: await qo'shildi */
     const res = await fetch(`${BASE}/users`, { headers: authH() });
     if (await checkAuth(res)) return;
     if (!res.ok) throw new Error();
@@ -446,9 +696,12 @@ function renderAuthors() {
 function authorCard(a) {
   const ini  = ((a.first_name||'?')[0] + (a.last_name||'?')[0]).toUpperCase();
   const isMe = currentUser && currentUser.id === a.id;
+  const imgHtml = a.user_avatar
+    ? `<img src="http://localhost:8000${esc(a.user_avatar)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none'"/>`
+    : esc(ini);
   return `
     <div class="author-card" style="${isMe ? 'border-color:rgba(245,197,66,.4)' : ''}">
-      <div class="ava">${esc(ini)}</div>
+      <div class="ava">${imgHtml}</div>
       <div class="ava-info">
         <div class="ava-name">${esc(a.first_name)} ${esc(a.last_name)}
           ${isMe ? '<span style="font-size:10px;background:rgba(245,197,66,.15);color:var(--accent);padding:2px 8px;border-radius:99px;font-weight:700;margin-left:5px">Men</span>' : ''}
@@ -482,14 +735,14 @@ async function submitAuthor() {
 async function deleteAuthor(id) {
   if (!confirm("Bu muallifni o'chirishni xohlaysizmi?")) return;
   try {
-    /* DELETE /users{id} — backendda slash yo'q, shu ko'rinishda yuboramiz */
-    const res = await fetch(`${BASE}/users${id}`, { method: 'DELETE', headers: authH() });
+    /* ✅ TO'G'RILANDI: /users/{id} — slash qo'shildi */
+    const res = await fetch(`${BASE}/users/${id}`, { method: 'DELETE', headers: authH() });
     if (await checkAuth(res)) return;
     toast("🗑 Muallif o'chirildi!"); loadAuthors(); loadPosts();
   } catch { toast("❌ Xatolik!", 'err'); }
 }
 
-/* POSTS */
+/* ─── POSTS ──────────────────────────────── */
 async function loadPosts() {
   document.getElementById('posts-container').innerHTML =
     `<div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>`;
@@ -507,10 +760,6 @@ async function loadPosts() {
   }
 }
 
-/*
-  GET /likes/{post_id}    → int        (like soni)
-  GET /comments/{post_id} → List[str]  (faqat matnlar)
-*/
 async function enrichPosts(posts) {
   await Promise.all(posts.map(async p => {
     try {
@@ -518,8 +767,8 @@ async function enrichPosts(posts) {
         fetch(`${BASE}/likes/${p.id}`,    { headers: authH() }),
         fetch(`${BASE}/comments/${p.id}`, { headers: authH() })
       ]);
-      p.likeCount = lRes.ok ? (await lRes.json()) : 0;     // int
-      p.comments  = cRes.ok ? (await cRes.json()) : [];    // string[]
+      p.likeCount = lRes.ok ? (await lRes.json()) : 0;
+      p.comments  = cRes.ok ? (await cRes.json()) : [];
     } catch { p.likeCount = 0; p.comments = []; }
   }));
 }
@@ -542,9 +791,13 @@ function postCard(p) {
   const name     = a ? `${a.first_name} ${a.last_name}` : `#${p.author_id}`;
   const initials = a ? ((a.first_name||'?')[0] + (a.last_name||'?')[0]).toUpperCase() : '?';
   const likeCnt  = typeof p.likeCount === 'number' ? p.likeCount : 0;
-  const comments = Array.isArray(p.comments) ? p.comments : [];  // string[]
+  const comments = Array.isArray(p.comments) ? p.comments : [];
 
-  /* comments — List[str]: har element oddiy matn satri */
+  /* author avatar in post card */
+  const authorAvatarHtml = a?.user_avatar
+    ? `<img src="http://localhost:8000${esc(a.user_avatar)}" alt="ava" onerror="this.style.display='none'"/>`
+    : esc(initials);
+
   const commentsHtml = comments.map(text =>
     `<div class="comment-item">${esc(String(text))}</div>`
   ).join('');
@@ -554,7 +807,7 @@ function postCard(p) {
       <div class="post-meta">
         <span class="post-id-chip">#${p.id}</span>
         <span class="author-pill">
-          <span class="author-pill-dot">${esc(initials)}</span>${esc(name)}
+          <span class="author-pill-dot">${authorAvatarHtml}</span>${esc(name)}
         </span>
       </div>
       <div class="post-title">${esc(p.title)}</div>
@@ -640,7 +893,7 @@ function cancelEdit() {
   document.getElementById('sidebar').classList.remove('editing');
 }
 
-/* LIKE — POST /like/{post_id} → LikeOut yoki 400 */
+/* ─── LIKE ────────────────────────────────── */
 async function doLike(postId) {
   const btn = document.getElementById(`like-${postId}`);
   const cnt = document.getElementById(`lc-${postId}`);
@@ -648,10 +901,7 @@ async function doLike(postId) {
   try {
     const res = await fetch(`${BASE}/like/${postId}`, { method: 'POST', headers: authH() });
     if (await checkAuth(res)) return;
-    if (res.status === 400) {
-      btn?.classList.add('liked');
-      toast('❤️ Allaqachon like bosilgan!', 'err'); return;
-    }
+    if (res.status === 400) { btn?.classList.add('liked'); toast('❤️ Allaqachon like bosilgan!', 'err'); return; }
     if (!res.ok) throw new Error();
     if (cnt) cnt.textContent = parseInt(cnt.textContent || 0) + 1;
     btn?.classList.add('liked');
@@ -659,10 +909,7 @@ async function doLike(postId) {
   } catch { toast('❌ Xatolik!', 'err'); }
 }
 
-/* COMMENTS
-   POST /comment/{post_id}?comment=...  → CommentOut (content, post_id, author_id)
-   GET  /comments/{post_id}             → List[str]
-*/
+/* ─── COMMENTS ────────────────────────────── */
 function toggleComments(postId) {
   document.getElementById(`cmts-${postId}`)?.classList.toggle('open');
 }
@@ -678,14 +925,12 @@ async function sendComment(postId) {
     );
     if (await checkAuth(res)) return;
     if (!res.ok) throw new Error();
-    const c = await res.json();          // CommentOut
+    const c = await res.json();
     input.value = '';
     const listEl = document.getElementById(`cmts-list-${postId}`);
-    /* "hali izoh yo'q" div ini tozalaymiz */
     if (listEl?.querySelector('div[style]')) listEl.innerHTML = '';
     const div = document.createElement('div');
     div.className = 'comment-item';
-    /* CommentOut.content — bu saqlanadigan matn */
     div.textContent = c.content || text;
     listEl?.appendChild(div);
     const cc = document.getElementById(`cc-${postId}`);
@@ -694,11 +939,11 @@ async function sendComment(postId) {
   } catch { toast('❌ Izoh yuborishda xatolik!', 'err'); }
 }
 
-/* HELPERS */
+/* ─── HELPERS ────────────────────────────── */
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function escJs(s) { return String(s||'').replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$'); }
 
-/* INIT */
+/* ─── INIT ───────────────────────────────── */
 (function init() {
   const token = getToken(), username = getUsername();
   if (!token) return;

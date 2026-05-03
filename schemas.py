@@ -15,6 +15,7 @@ class AuthorCreate(AuthorBase):
 
 class AuthorOut(AuthorBase):
     id:int = Field(ge = 1)
+    user_avatar:str = Field(max_length=200, nullable=True)
 
 class Token(BaseModel):
     access_token: str
