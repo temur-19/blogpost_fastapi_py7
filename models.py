@@ -4,7 +4,7 @@ from typing import List
 
 
 from database import Base
-
+from enums import UserRole
 
 class Author(Base):
     __tablename__ = 'author'
@@ -19,6 +19,7 @@ class Author(Base):
     comment:Mapped[List['Comment']] = relationship(back_populates='auth', cascade='all, delete-orphan')
     like:Mapped[List[   'Like']] = relationship(back_populates='auth', cascade='all, delete-orphan')
     user_avatar: Mapped[str] = mapped_column(String(length=200), nullable=True)
+    role: Mapped[UserRole] = mapped_column(String(length=20), default=UserRole.USER)
 
 class Posts(Base):
     __tablename__ = 'posts'

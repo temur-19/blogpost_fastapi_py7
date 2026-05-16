@@ -76,17 +76,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .topbar-right{display:flex;align-items:center;gap:10px}
 .user-pill{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);padding:5px 14px 5px 6px;border-radius:99px;font-size:13px;font-weight:500;cursor:pointer;transition:border-color .2s}
 .user-pill:hover{border-color:rgba(245,197,66,.4)}
-
-/* AVATAR — topbar */
-.user-avatar{
-  width:28px;height:28px;border-radius:50%;
-  background:var(--accent);color:#000;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;font-size:13px;font-weight:700;
-  flex-shrink:0;overflow:hidden;
-}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;flex-shrink:0;overflow:hidden}
 .user-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-
 .btn-logout-pill{background:rgba(224,92,92,.15);border:1px solid rgba(224,92,92,.3);color:#e05c5c;padding:6px 14px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-logout-pill:hover{background:rgba(224,92,92,.25)}
 
@@ -137,95 +128,45 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .btn-send{background:var(--accent);color:#000;border:none;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;flex-shrink:0}
 .btn-send:hover{background:#f0b800}
 
-/* ME CARD — avatar upload */
-.me-card{
-  background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);
-  border-radius:var(--radius);padding:14px;display:none;
-  flex-direction:column;gap:10px;margin-bottom:16px;
-}
+/* ME CARD */
+.me-card{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);border-radius:var(--radius);padding:14px;display:none;flex-direction:column;gap:10px;margin-bottom:16px}
 .me-card-row{display:flex;align-items:center;gap:10px}
 .me-card-ava-wrap{position:relative;width:42px;height:42px;flex-shrink:0}
-.me-card-ava{
-  width:42px;height:42px;border-radius:50%;
-  background:var(--accent);color:#000;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;font-size:16px;font-weight:900;
-  overflow:hidden;cursor:pointer;
-  border:2px solid transparent;transition:border-color .2s;
-}
+.me-card-ava{width:42px;height:42px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:900;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .2s}
 .me-card-ava:hover{border-color:var(--accent)}
 .me-card-ava img{width:100%;height:100%;object-fit:cover}
-.ava-upload-badge{
-  position:absolute;bottom:-2px;right:-2px;
-  width:16px;height:16px;border-radius:50%;
-  background:var(--accent);color:#000;
-  display:flex;align-items:center;justify-content:center;
-  font-size:9px;cursor:pointer;border:1.5px solid var(--surface);
-}
+.ava-upload-badge{position:absolute;bottom:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;border:1.5px solid var(--surface)}
 .me-card-info{flex:1}
 .me-card-name{font-size:13px;font-weight:600;color:var(--text)}
 .me-card-sub{font-size:11px;color:var(--muted)}
-
-/* Avatar upload progress */
-.ava-progress{
-  background:var(--surface2);border-radius:6px;overflow:hidden;height:4px;display:none;
-}
+.ava-progress{background:var(--surface2);border-radius:6px;overflow:hidden;height:4px;display:none}
 .ava-progress-bar{height:100%;background:var(--accent);width:0%;transition:width .3s}
 
 /* AUTHOR CARD */
 .author-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;gap:14px;transition:transform .2s,border-color .2s;animation:popIn .35s cubic-bezier(.22,1,.36,1) both}
 .author-card:hover{transform:translateY(-3px);border-color:rgba(92,158,255,.25)}
-.ava{
-  width:48px;height:48px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),#f0a500);color:#000;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;font-size:20px;font-weight:900;
-  flex-shrink:0;overflow:hidden;
-}
+.ava{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#f0a500);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;font-weight:900;flex-shrink:0;overflow:hidden}
 .ava img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .ava-info{flex:1}
 .ava-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text)}
 .ava-username{font-size:12px;color:var(--muted)}
 
 /* PROFILE MODAL */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
-  z-index:200;display:flex;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .25s;
-}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal{
-  background:var(--surface);border:1px solid var(--border);border-radius:22px;
-  padding:32px;width:100%;max-width:380px;box-shadow:var(--shadow);
-  transform:scale(.93);transition:transform .25s;
-}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:32px;width:100%;max-width:380px;box-shadow:var(--shadow);transform:scale(.93);transition:transform .25s}
 .modal-overlay.open .modal{transform:scale(1)}
 .modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px}
 .modal-ava-wrap{display:flex;justify-content:center;margin-bottom:20px;position:relative;width:fit-content;margin-inline:auto}
-.modal-ava{
-  width:90px;height:90px;border-radius:50%;
-  background:var(--accent);color:#000;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;font-size:36px;font-weight:900;
-  overflow:hidden;border:3px solid var(--accent);
-}
+.modal-ava{width:90px;height:90px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:36px;font-weight:900;overflow:hidden;border:3px solid var(--accent)}
 .modal-ava img{width:100%;height:100%;object-fit:cover}
-.modal-ava-btn{
-  position:absolute;bottom:2px;right:2px;
-  background:var(--accent);color:#000;border:2px solid var(--surface);
-  width:28px;height:28px;border-radius:50%;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:13px;
-  transition:background .2s;
-}
+.modal-ava-btn{position:absolute;bottom:2px;right:2px;background:var(--accent);color:#000;border:2px solid var(--surface);width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:background .2s}
 .modal-ava-btn:hover{background:#f0b800}
 .modal-info{text-align:center;margin-bottom:20px}
 .modal-info-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text)}
 .modal-info-user{font-size:13px;color:var(--muted);margin-top:3px}
 .modal-upload-section{margin-bottom:16px}
-.upload-drop{
-  border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;
-  cursor:pointer;transition:all .2s;color:var(--muted);font-size:13px;
-}
+.upload-drop{border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;color:var(--muted);font-size:13px}
 .upload-drop:hover,.upload-drop.drag{border-color:var(--accent);background:rgba(245,197,66,.05);color:var(--accent)}
 .upload-drop-icon{font-size:28px;margin-bottom:6px}
 .modal-progress{background:var(--surface2);border-radius:6px;overflow:hidden;height:6px;margin-top:10px;display:none}
@@ -250,7 +191,6 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .session-banner{display:none;background:rgba(245,197,66,.08);border-bottom:1px solid rgba(245,197,66,.2);color:var(--accent);text-align:center;padding:8px 20px;font-size:13px;font-weight:600}
 .session-banner.show{display:block}
 
-/* Hidden file input */
 #avatar-file-input{display:none}
 
 @media(max-width:820px){
@@ -320,7 +260,6 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   </div>
 </div>
 
-<!-- Hidden file input -->
 <input type="file" id="avatar-file-input" accept="image/jpeg,image/png,image/gif,image/webp"
        onchange="uploadAvatar(this.files[0])"/>
 
@@ -334,7 +273,6 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
       <button class="nav-btn"        id="nav-authors" onclick="switchTab('authors')">👤 Mualliflar</button>
     </div>
     <div class="topbar-right">
-      <!-- Profil pill — bosilsa modal ochiladi -->
       <div class="user-pill" onclick="openProfileModal()" title="Profilni ko'rish / rasm yuklash">
         <div class="user-avatar" id="h-ava">U</div>
         <span id="h-name">User</span>
@@ -345,9 +283,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 
   <div class="layout">
     <aside class="sidebar" id="sidebar">
-      <!-- POST FORM -->
       <div id="post-form-section">
-        <!-- ME CARD -->
         <div class="me-card" id="me-card">
           <div class="me-card-row">
             <div class="me-card-ava-wrap">
@@ -376,14 +312,14 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
         <button class="btn btn-gold"  id="post-btn"    onclick="submitPost()">✚ Yaratish</button>
         <button class="btn btn-ghost" id="post-cancel" onclick="cancelEdit()">✕ Bekor qilish</button>
       </div>
-      <!-- AUTHOR FORM -->
+
       <div id="author-form-section" style="display:none">
         <div class="sidebar-title">👤 Yangi Muallif</div>
         <div class="ferr" id="author-err"></div>
         <div class="field"><label>Ism</label><input id="a-fn"   type="text" placeholder="Ism..."/></div>
         <div class="field"><label>Familiya</label><input id="a-ln" type="text" placeholder="Familiya..."/></div>
         <div class="field"><label>Username</label><input id="a-user" type="text" placeholder="username..."/></div>
-        <div class="field"><label>Parol</label><input id="a-pass" type="password" placeholder="••••••••"/></div>
+        <div class="field"><label>Parol</label><input id="a-pass" type="password" placeholder=" "/></div>
         <button class="btn btn-gold" onclick="submitAuthor()">✚ Qo'shish</button>
       </div>
     </aside>
@@ -414,7 +350,13 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 <div class="toast" id="toast"></div>
 
 <script>
-const BASE = 'http://localhost:8000/api/posts';
+// ═══════════════════════════════════════════════════════
+// BASE URL'lar — har bir router o'z prefixi bilan
+// ═══════════════════════════════════════════════════════
+const API      = 'http://localhost:8000';
+const POSTS    = `${API}/api/posts`;   // post_router prefix='/api/posts'
+const USERS    = `${API}/api/users`;   // user_router prefix='/api/users'
+
 let authors = [], editingId = null, expiryTimer = null, currentUser = null;
 
 /* ─── TOKEN ─────────────────────────────── */
@@ -458,6 +400,7 @@ document.addEventListener('keydown', e => {
     document.getElementById('login-form').style.display !== 'none' ? doLogin() : doRegister();
 });
 
+// ─── TO'G'RILANDI: /api/posts/token → /api/users/token/ ───
 async function doLogin() {
   const username = document.getElementById('l-user').value.trim();
   const password = document.getElementById('l-pass').value;
@@ -466,7 +409,7 @@ async function doLogin() {
   if (!username || !password) { errEl.textContent = "Username va parolni kiriting!"; errEl.style.display = 'block'; return; }
   errEl.style.display = 'none'; btn.disabled = true; btn.textContent = '⏳ Kirilmoqda...';
   try {
-    const res = await fetch(`${BASE}/token`, {
+    const res = await fetch(`${USERS}/token/`, {
       method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({ username, password })
     });
@@ -478,6 +421,7 @@ async function doLogin() {
   finally { btn.disabled = false; btn.textContent = '🔑 Kirish'; }
 }
 
+// ─── TO'G'RILANDI: /api/posts/register → /api/users/register/ ───
 async function doRegister() {
   const first_name = document.getElementById('r-fn').value.trim();
   const last_name  = document.getElementById('r-ln').value.trim();
@@ -490,7 +434,7 @@ async function doRegister() {
   if (password !== password2) { errEl.textContent = "Parollar mos kelmadi!"; errEl.style.display = 'block'; return; }
   errEl.style.display = 'none'; btn.disabled = true; btn.textContent = "⏳ Ro'yxatdan o'tilmoqda...";
   try {
-    const res = await fetch(`${BASE}/register`, {
+    const res = await fetch(`${USERS}/register/`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ first_name, last_name, username, password })
     });
@@ -502,13 +446,14 @@ async function doRegister() {
   finally { btn.disabled = false; btn.textContent = "✚ Ro'yxatdan o'tish"; }
 }
 
+// ─── TO'G'RILANDI: /api/posts/users/me → /api/users/me/ ───
 async function enterApp(username) {
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app-screen').style.display  = 'block';
   document.getElementById('h-name').textContent = username;
   document.getElementById('h-ava').textContent  = username[0].toUpperCase();
   try {
-    const res = await fetch(`${BASE}/users/me`, { method: 'POST', headers: authH() });
+    const res = await fetch(`${USERS}/me/`, { method: 'POST', headers: authH() });
     if (res.ok) {
       currentUser = await res.json();
       showMeCard();
@@ -519,15 +464,10 @@ async function enterApp(username) {
 }
 
 /* ─── AVATAR HELPERS ────────────────────── */
-/**
- * avatarEl — DOM element (.user-avatar, .me-card-ava, .ava, .modal-ava)
- * url       — /static/... yoki null
- * initials  — fallback harflar
- */
 function setAvatarEl(el, url, initials) {
   if (!el) return;
   if (url) {
-    el.innerHTML = `<img src="http://localhost:8000${url}" alt="avatar" onerror="this.parentElement.innerHTML='${esc(initials)}'"/>`;
+    el.innerHTML = `<img src="${API}${url}" alt="avatar" onerror="this.parentElement.innerHTML='${esc(initials)}'"/>`;
   } else {
     el.innerHTML = esc(initials);
   }
@@ -542,26 +482,18 @@ function showMeCard() {
   if (!currentUser) return;
   const ini = getUserInitials(currentUser);
   const url = currentUser.user_avatar || null;
-
-  /* topbar */
   setAvatarEl(document.getElementById('h-ava'), url, ini);
-
-  /* sidebar me-card */
   setAvatarEl(document.getElementById('me-ava'), url, ini);
   document.getElementById('me-name').textContent     = `${currentUser.first_name || ''} ${currentUser.last_name || ''}`;
   document.getElementById('me-username').textContent = `@${currentUser.username || ''}`;
   document.getElementById('me-card').style.display   = 'flex';
-
-  /* modal */
   setAvatarEl(document.getElementById('modal-ava-display'), url, ini);
   document.getElementById('modal-full-name').textContent = `${currentUser.first_name || ''} ${currentUser.last_name || ''}`;
   document.getElementById('modal-username').textContent  = `@${currentUser.username || ''}`;
 }
 
 /* ─── PROFILE MODAL ─────────────────────── */
-function openProfileModal() {
-  document.getElementById('profile-modal').classList.add('open');
-}
+function openProfileModal() { document.getElementById('profile-modal').classList.add('open'); }
 function closeProfileModal(e) {
   if (!e || e.target === document.getElementById('profile-modal'))
     document.getElementById('profile-modal').classList.remove('open');
@@ -573,7 +505,7 @@ function handleDrop(e) {
   if (file) uploadAvatar(file);
 }
 
-/* ─── AVATAR UPLOAD ─────────────────────── */
+// ─── TO'G'RILANDI: /api/posts/users/upload_avatar/ → /api/users/upload_avatar/ ───
 async function uploadAvatar(file) {
   if (!file) return;
   const MAX = 5 * 1024 * 1024;
@@ -581,7 +513,6 @@ async function uploadAvatar(file) {
   if (!ALLOWED.includes(file.type)) { toast('❌ Faqat rasm fayllari qabul qilinadi!', 'err'); return; }
   if (file.size > MAX)              { toast('❌ Fayl hajmi 5MB dan oshmasligi kerak!', 'err'); return; }
 
-  /* Progress ko'rsatish */
   const progWrap = document.getElementById('ava-progress');
   const progBar  = document.getElementById('ava-progress-bar');
   const mProg    = document.getElementById('modal-progress');
@@ -592,32 +523,21 @@ async function uploadAvatar(file) {
   try {
     const formData = new FormData();
     formData.append('file', file);
-
-    /* Content-Type ni FormData o'zi belgilaydi (multipart/form-data) */
-    const res = await fetch(`${BASE}/users/upload_avatar/`, {
+    const res = await fetch(`${USERS}/upload_avatar/`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${getToken()}` },
       body: formData
     });
-
     progBar.style.width = '80%'; mBar.style.width = '80%';
-
     if (await checkAuth(res)) return;
-    if (!res.ok) {
-      const d = await res.json().catch(() => ({}));
-      toast(`❌ ${d.detail || "Rasm yuklanmadi!"}`, 'err'); return;
-    }
-
-    const updated = await res.json(); // yangilangan AuthorOut
+    if (!res.ok) { const d = await res.json().catch(() => ({})); toast(`❌ ${d.detail || "Rasm yuklanmadi!"}`, 'err'); return; }
+    const updated = await res.json();
     currentUser = updated;
     progBar.style.width = '100%'; mBar.style.width = '100%';
-
     showMeCard();
-    /* authors ro'yxatini ham yangilash */
     const idx = authors.findIndex(a => a.id === currentUser.id);
     if (idx !== -1) authors[idx] = currentUser;
     renderAuthors();
-
     toast('✅ Profil rasmi yangilandi!');
   } catch { toast('❌ Yuklashda xatolik!', 'err'); }
   finally {
@@ -625,7 +545,6 @@ async function uploadAvatar(file) {
       progWrap.style.display = 'none'; progBar.style.width = '0%';
       mProg.style.display    = 'none'; mBar.style.width    = '0%';
     }, 800);
-    /* input ni tozalash — bir xil faylni qayta tanlasa ham ishlaydi */
     document.getElementById('avatar-file-input').value = '';
   }
 }
@@ -654,10 +573,10 @@ function switchTab(tab) {
 }
 
 /* ─── AUTHORS ────────────────────────────── */
+// ─── TO'G'RILANDI: /api/posts/users → /api/users/authors/ ───
 async function loadAuthors() {
   try {
-    /* ✅ TO'G'RILANDI: await qo'shildi */
-    const res = await fetch(`${BASE}/users`, { headers: authH() });
+    const res = await fetch(`${USERS}/authors/`, { headers: authH() });
     if (await checkAuth(res)) return;
     if (!res.ok) throw new Error();
     authors = await res.json();
@@ -697,7 +616,7 @@ function authorCard(a) {
   const ini  = ((a.first_name||'?')[0] + (a.last_name||'?')[0]).toUpperCase();
   const isMe = currentUser && currentUser.id === a.id;
   const imgHtml = a.user_avatar
-    ? `<img src="http://localhost:8000${esc(a.user_avatar)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none'"/>`
+    ? `<img src="${API}${esc(a.user_avatar)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none'"/>`
     : esc(ini);
   return `
     <div class="author-card" style="${isMe ? 'border-color:rgba(245,197,66,.4)' : ''}">
@@ -721,7 +640,7 @@ async function submitAuthor() {
   if (!first_name || !last_name || !username || !password) { errEl.textContent = "Barcha maydonlarni to'ldiring!"; errEl.style.display = 'block'; return; }
   errEl.style.display = 'none';
   try {
-    const res = await fetch(`${BASE}/register`, {
+    const res = await fetch(`${USERS}/register/`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ first_name, last_name, username, password })
     });
@@ -732,11 +651,11 @@ async function submitAuthor() {
   } catch { toast("❌ Xatolik!", 'err'); }
 }
 
+// ─── TO'G'RILANDI: /api/posts/users/{id} → /api/users/delete_author/{id} ───
 async function deleteAuthor(id) {
   if (!confirm("Bu muallifni o'chirishni xohlaysizmi?")) return;
   try {
-    /* ✅ TO'G'RILANDI: /users/{id} — slash qo'shildi */
-    const res = await fetch(`${BASE}/users/${id}`, { method: 'DELETE', headers: authH() });
+    const res = await fetch(`${USERS}/delete_author/${id}`, { method: 'DELETE', headers: authH() });
     if (await checkAuth(res)) return;
     toast("🗑 Muallif o'chirildi!"); loadAuthors(); loadPosts();
   } catch { toast("❌ Xatolik!", 'err'); }
@@ -747,7 +666,7 @@ async function loadPosts() {
   document.getElementById('posts-container').innerHTML =
     `<div class="state"><div class="spinner"></div><p>Yuklanmoqda...</p></div>`;
   try {
-    const res = await fetch(`${BASE}/`, { headers: authH() });
+    const res = await fetch(`${POSTS}/`, { headers: authH() });
     if (await checkAuth(res)) return;
     if (!res.ok) throw new Error();
     const posts = await res.json();
@@ -764,8 +683,8 @@ async function enrichPosts(posts) {
   await Promise.all(posts.map(async p => {
     try {
       const [lRes, cRes] = await Promise.all([
-        fetch(`${BASE}/likes/${p.id}`,    { headers: authH() }),
-        fetch(`${BASE}/comments/${p.id}`, { headers: authH() })
+        fetch(`${POSTS}/likes/${p.id}`,    { headers: authH() }),
+        fetch(`${POSTS}/comments/${p.id}`, { headers: authH() })
       ]);
       p.likeCount = lRes.ok ? (await lRes.json()) : 0;
       p.comments  = cRes.ok ? (await cRes.json()) : [];
@@ -793,9 +712,8 @@ function postCard(p) {
   const likeCnt  = typeof p.likeCount === 'number' ? p.likeCount : 0;
   const comments = Array.isArray(p.comments) ? p.comments : [];
 
-  /* author avatar in post card */
   const authorAvatarHtml = a?.user_avatar
-    ? `<img src="http://localhost:8000${esc(a.user_avatar)}" alt="ava" onerror="this.style.display='none'"/>`
+    ? `<img src="${API}${esc(a.user_avatar)}" alt="ava" onerror="this.style.display='none'"/>`
     : esc(initials);
 
   const commentsHtml = comments.map(text =>
@@ -849,7 +767,7 @@ async function submitPost() {
   errEl.style.display = 'none'; btn.disabled = true; btn.textContent = '⏳ Saqlanmoqda...';
   try {
     const body = { title, content, image_path, author_id: Number(author_id) };
-    const url  = editingId ? `${BASE}/${editingId}` : `${BASE}/`;
+    const url  = editingId ? `${POSTS}/${editingId}` : `${POSTS}/`;
     const meth = editingId ? 'PUT' : 'POST';
     const res  = await fetch(url, { method: meth, headers: authH(), body: JSON.stringify(body) });
     if (await checkAuth(res)) return;
@@ -863,7 +781,7 @@ async function submitPost() {
 async function deletePost(id) {
   if (!confirm("Bu postni o'chirishni xohlaysizmi?")) return;
   try {
-    const res = await fetch(`${BASE}/${id}`, { method: 'DELETE', headers: authH() });
+    const res = await fetch(`${POSTS}/${id}`, { method: 'DELETE', headers: authH() });
     if (await checkAuth(res)) return;
     toast("🗑 Post o'chirildi!"); loadPosts();
   } catch { toast("❌ Xatolik!", 'err'); }
@@ -899,7 +817,7 @@ async function doLike(postId) {
   const cnt = document.getElementById(`lc-${postId}`);
   if (btn?.classList.contains('liked')) { toast('❤️ Allaqachon like bosilgan!', 'err'); return; }
   try {
-    const res = await fetch(`${BASE}/like/${postId}`, { method: 'POST', headers: authH() });
+    const res = await fetch(`${POSTS}/like/${postId}`, { method: 'POST', headers: authH() });
     if (await checkAuth(res)) return;
     if (res.status === 400) { btn?.classList.add('liked'); toast('❤️ Allaqachon like bosilgan!', 'err'); return; }
     if (!res.ok) throw new Error();
@@ -920,7 +838,7 @@ async function sendComment(postId) {
   if (!text) return;
   try {
     const res = await fetch(
-      `${BASE}/comment/${postId}?comment=${encodeURIComponent(text)}`,
+      `${POSTS}/comment/${postId}?comment=${encodeURIComponent(text)}`,
       { method: 'POST', headers: authH() }
     );
     if (await checkAuth(res)) return;
